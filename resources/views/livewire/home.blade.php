@@ -15,6 +15,7 @@
                 </div>
 
                 <div class="mt-2 text-white hover:text-black">${{ $earned }}</div>
+                <div class="mt-2 text-white hover:text-black">{{ $hours }} hours</div>
             </div>
         </div>
     </div>

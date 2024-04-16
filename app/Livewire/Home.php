@@ -48,11 +48,11 @@ class Home extends Component
         } while ($som->month === 4);
 
         return view('livewire.home', [
-            'hours' => round($seconds / 3600, 2),
+            'hours' => round($seconds / 3600, 1),
             'earned' => (int) (($seconds / 3600) * $rate),
             'goal' => (int) ((($seconds / 3600) / 140) * 100),
 
-            'thours' => round($tseconds / 3600, 2),
+            'thours' => round($tseconds / 3600, 1),
             'tearned' => (int) (($tseconds / 3600) * $rate),
             'tgoal' => (int) ((($tseconds / 3600) / 7) * 100),
 
