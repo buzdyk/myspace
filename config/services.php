@@ -31,4 +31,13 @@ return [
         ],
     ],
 
+    'mayven' => [
+        'api_url' => env('MAYVEN_API_URL'),
+        'auth' => env('MAYVEN_AUTH'),
+    ],
+
+    'everhour' => [
+        'api_url' => env('EVERHOUR_API_URL'),
+        'token' => env('EVERHOUR_TOKEN'),
+    ],
 ];
