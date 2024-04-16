@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Livewire;
 
 use App\Interfaces\TimeTracker;
 use App\Services\EverhourAPI;
 use App\Services\MayvenAPI;
 use Carbon\Carbon;
+use Livewire\Component;
 
-class HomeController extends Controller
+class Home extends Component
 {
-    public function index()
+    public function render()
     {
         $trackers = [
             new EverhourAPI(),
@@ -46,7 +47,7 @@ class HomeController extends Controller
             $som->addDay();
         } while ($som->month === 4);
 
-        return view('index', [
+        return view('livewire.home', [
             'hours' => round($seconds / 3600, 2),
             'earned' => (int) (($seconds / 3600) * $rate),
             'goal' => (int) ((($seconds / 3600) / 140) * 100),
