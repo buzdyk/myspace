@@ -43,6 +43,6 @@ class MayvenAPI implements TimeTracker
         $now = new Carbon();
         $then = new Carbon($current?->data?->started_at);
 
-        return $now->diffInSeconds($then);
+        return $now->diffInSeconds($then, true);
     }
 }
