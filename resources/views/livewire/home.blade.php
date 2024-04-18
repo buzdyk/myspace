@@ -1,8 +1,11 @@
 <div>
-    <div wire:poll.600s class="h-screen flex items-center justify-center font-mono">
+    <div wire:poll.10s class="h-screen flex items-center justify-center font-mono">
         <div class="text-2xl selection:bg-red-700 selection:text-white">
             <div class="flex">
-                <div>
+                <div class="relative">
+                    @if ($isActive)
+                        <div class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -28px; top: 12px;"></div>
+                    @endif
                     <div><span class="underline">Today</span></div>
                     <div class="mt-2">{{ $tgoal }}%</div>
                     <div class="mt-2 text-gray-800 hover:text-gray-300">${{ $tearned }}</div>

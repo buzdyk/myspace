@@ -10,6 +10,8 @@ use Livewire\Component;
 
 class Home extends Component
 {
+    public bool $isActive = false;
+
     public function render(TimeTrackerRepository $repository)
     {
         $repository
@@ -37,6 +39,7 @@ class Home extends Component
         $tgoal = (int) (($thours / 7) * 100);
 
         $isActive = !!$runningHours;
+        $this->isActive = $isActive;
 
         return view('livewire.home', compact([
             'hours', 'goal', 'earned',
