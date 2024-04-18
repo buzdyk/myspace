@@ -3,9 +3,10 @@
 namespace App\Livewire;
 
 use App\Repositories\TimeTrackerRepository;
-use App\Services\EverhourAPI;
-use App\Services\MayvenAPI;
+use App\Services\Api\Everhour;
+use App\Services\Api\Mayven;
 use Carbon\Carbon;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class Home extends Component
@@ -15,13 +16,13 @@ class Home extends Component
     public function render(TimeTrackerRepository $repository)
     {
         $repository
-            ->addTracker(new MayvenAPI())
-            ->addTracker(new EverhourAPI());
+            ->addTracker(new Mayven())
+            ->addTracker(new Everhour());
 
         return $this->response($repository);
     }
 
-    protected function response(TimeTrackerRepository $repository)
+    protected function response(TimeTrackerRepository $repository): View
     {
         $rate = (int) env('HOURLY_RATE');
 
