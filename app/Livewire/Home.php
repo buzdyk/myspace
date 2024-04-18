@@ -2,7 +2,7 @@
 
 namespace App\Livewire;
 
-use App\Interfaces\TimeTracker;
+use App\Repositories\TimeTrackerRepository;
 use App\Services\EverhourAPI;
 use App\Services\MayvenAPI;
 use Carbon\Carbon;
@@ -10,54 +10,38 @@ use Livewire\Component;
 
 class Home extends Component
 {
-    public function render()
+    public function render(TimeTrackerRepository $repository)
     {
-        $trackers = [
-            new EverhourAPI(),
-            new MayvenAPI(),
-        ];
+        $repository
+            ->addTracker(new MayvenAPI())
+            ->addTracker(new EverhourAPI());
 
-        $seconds = 0; $tseconds = 0;
-        $som = Carbon::now()->startOfMonth();
-        $eom = Carbon::now()->endOfMonth();
-        $today = Carbon::now();
+        return $this->response($repository);
+    }
 
-        /** @var TimeTracker $tracker */
-        foreach ($trackers as $tracker) {
-            $seconds += $tracker->getSeconds($som, $eom);
-            $seconds += $tracker->getRunningSeconds();
-
-            $tseconds += $tracker->getSeconds($today, $today);
-            $tseconds += $tracker->getRunningSeconds();
-        }
-
+    protected function response(TimeTrackerRepository $repository)
+    {
         $rate = (int) env('HOURLY_RATE');
 
-        $daysRemaining = 0;
-        $daysTotal = 0;
+        $runningHours = $repository->runningHours();
 
-        $yesterday = $today->copy()->subDay();
+        $hours = $repository->hours(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth());
+        $hours += $runningHours; $hours = round($hours, 1);
+        $goal = round((($hours / 140) * 100), 1);
+        $earned = (int) ($hours * $rate);
 
-        do {
-            if (false === ($som->isSunday() || $som->isSaturday())) {
-                $som->isAfter($yesterday) && $daysRemaining++;
-                $daysTotal++;
-            }
+        $thours = $repository->hours(Carbon::now(), Carbon::now());
+        $thours += $runningHours; $thours = round($thours, 1);
 
-            $som->addDay();
-        } while ($som->month === 4);
+        $tearned = (int) ($thours * $rate);
+        $tgoal = (int) (($thours / 7) * 100);
 
-        return view('livewire.home', [
-            'hours' => round($seconds / 3600, 1),
-            'earned' => (int) (($seconds / 3600) * $rate),
-            'goal' => (int) ((($seconds / 3600) / 140) * 100),
+        $isActive = !!$runningHours;
 
-            'thours' => round($tseconds / 3600, 1),
-            'tearned' => (int) (($tseconds / 3600) * $rate),
-            'tgoal' => (int) ((($tseconds / 3600) / 7) * 100),
-
-            'daysRemaining' => $daysRemaining,
-            'daysTotal' => $daysTotal,
-        ]);
+        return view('livewire.home', compact([
+            'hours', 'goal', 'earned',
+            'thours', 'tearned', 'tgoal',
+            'isActive'
+        ]));
     }
 }

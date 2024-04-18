@@ -2,10 +2,11 @@
 
 namespace App\Services;
 
+use App\Interfaces\TimeTracker;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 
-class EverhourAPI
+class EverhourAPI implements TimeTracker
 {
     protected Client $client;
 

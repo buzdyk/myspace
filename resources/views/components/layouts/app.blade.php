@@ -8,7 +8,7 @@
         <link rel="icon" type="image/png" href="/favicon.png">
         {{-- ty https://icons8.com/icon/36026/favorite --}}
     </head>
-    <body>
+    <body class="bg-gray-800 text-gray-200">
         {{ $slot }}
     </body>
 </html>
