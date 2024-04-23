@@ -5,18 +5,15 @@
                 @if ($isActive)
                     <div class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -28px; top: 12px;"></div>
                 @endif
-                <div><span class="underline">Today</span></div>
-                <div class="mt-2">{{ $tgoal }}%</div>
+                <div>Today</div>
+                <div class="mt-4">{{ $tgoal }}%</div>
                 <div class="mt-2 text-gray-800 hover:text-gray-300">${{ $tearned }}</div>
                 <div class="mt-2 text-gray-800 hover:text-gray-300">{{ $thours }} hours</div>
             </div>
 
             <div class="ml-36">
-                <div class="underline">Month</div>
-                <div class="mt-2">{{ $goal }}%</div>
-                <div>
-                </div>
-
+                <div>Month</div>
+                <div class="mt-4">{{ $goal }}%</div>
                 <div class="mt-2 text-gray-800 hover:text-gray-300">${{ $earned }}</div>
                 <div class="mt-2 text-gray-800 hover:text-gray-300">{{ $hours }} hours</div>
             </div>
