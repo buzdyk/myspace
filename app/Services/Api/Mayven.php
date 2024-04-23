@@ -3,9 +3,11 @@
 namespace App\Services\Api;
 
 use App\Interfaces\TimeTracker;
+use App\Types\ProjectTimes;
+use App\Types\ProjectTime;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
-use Cache;
+use Illuminate\Support\Facades\Cache;
 
 class Mayven extends Rest implements TimeTracker
 {
@@ -55,5 +57,25 @@ class Mayven extends Rest implements TimeTracker
         $then = new Carbon($current?->data?->started_at);
 
         return $now->diffInSeconds($then, true);
+    }
+
+    public function getMonthlyTimeByProject(Carbon $dayOfMonth): ProjectTimes
+    {
+        $res = $this->get("/api/time-statistics", ['query' => [
+            "dateStart" => $dayOfMonth->copy()->startOfMonth()->toDateString() . ' 00:00:00',
+            "dateEnd" => $dayOfMonth->copy()->endOfMonth()->toDateString() . ' 23:59:59',
+            "users[]" => $this->getUserId(),
+            "groupByPrimaryValue" => "project_id",
+            "groupBySecondValue" => "todo_id",
+            "groupBy" => "project_id",
+            "orderBy" => "seconds:desc"
+        ]]);
+
+        $map = new ProjectTimes();
+        foreach (json_decode($res->getBody()->getContents())->data->aggregatedIntervals as $item) {
+            $map->add(new ProjectTime('mayven', $item->item_id, $item->title, $item->seconds));
+        }
+
+        return $map;
     }
 }

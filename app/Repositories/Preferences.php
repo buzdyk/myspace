@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-class PreferencesRepository
+class Preferences
 {
     public function getHourlyRate()
     {

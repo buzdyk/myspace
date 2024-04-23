@@ -2,19 +2,19 @@
 
 namespace App\Livewire;
 
-use App\Repositories\PreferencesRepository;
-use App\Repositories\TimeTrackerRepository;
+use App\Repositories\Preferences;
+use App\Repositories\Trackers;
 use App\Services\Api\Everhour;
 use App\Services\Api\Mayven;
 use Carbon\Carbon;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class Home extends Component
+class DailyAndMonthlyGoals extends Component
 {
     public bool $isActive = false;
 
-    public function render(TimeTrackerRepository $trackers, PreferencesRepository $preferences)
+    public function render(Trackers $trackers, Preferences $preferences)
     {
         $trackers
             ->addTracker(new Mayven())
@@ -23,7 +23,7 @@ class Home extends Component
         return $this->response($trackers, $preferences);
     }
 
-    protected function response(TimeTrackerRepository $trackers, PreferencesRepository $preferences): View
+    protected function response(Trackers $trackers, Preferences $preferences): View
     {
         $rate = $preferences->getHourlyRate();
 
@@ -44,7 +44,7 @@ class Home extends Component
         // todo add a link to the active task
         $this->isActive = $runningHours;
 
-        return view('livewire.home', compact([
+        return view('livewire.daily-and-monthly-goals', compact([
             'hours', 'goal', 'earned',
             'thours', 'tearned', 'tgoal',
         ]));
