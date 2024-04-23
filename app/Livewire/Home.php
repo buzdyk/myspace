@@ -29,17 +29,19 @@ class Home extends Component
 
         $runningHours = $trackers->runningHours();
 
+        // monthly values
         $hours = $trackers->hours(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth());
         $hours += $runningHours; $hours = round($hours, 1);
         $earned = (int) ($hours * $rate);
         $goal = round((($hours / $preferences->getMonthlyGoal()) * 100), 1);
 
+        // today values
         $thours = $trackers->hours(Carbon::now(), Carbon::now());
         $thours += $runningHours; $thours = round($thours, 1);
         $tearned = (int) ($thours * $rate);
         $tgoal = (int) (($thours / $preferences->getDailyGoal()) * 100);
 
-        // todo add active task link
+        // todo add a link to the active task
         $this->isActive = $runningHours;
 
         return view('livewire.home', compact([
@@ -47,6 +49,4 @@ class Home extends Component
             'thours', 'tearned', 'tgoal',
         ]));
     }
-
-
 }
