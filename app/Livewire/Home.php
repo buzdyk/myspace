@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Repositories\PreferencesRepository;
 use App\Repositories\TimeTrackerRepository;
 use App\Services\Api\Everhour;
 use App\Services\Api\Mayven;
@@ -13,39 +14,39 @@ class Home extends Component
 {
     public bool $isActive = false;
 
-    public function render(TimeTrackerRepository $repository)
+    public function render(TimeTrackerRepository $trackers, PreferencesRepository $preferences)
     {
-        $repository
+        $trackers
             ->addTracker(new Mayven())
             ->addTracker(new Everhour());
 
-        return $this->response($repository);
+        return $this->response($trackers, $preferences);
     }
 
-    protected function response(TimeTrackerRepository $repository): View
+    protected function response(TimeTrackerRepository $trackers, PreferencesRepository $preferences): View
     {
-        $rate = (int) env('HOURLY_RATE');
+        $rate = $preferences->getHourlyRate();
 
-        $runningHours = $repository->runningHours();
+        $runningHours = $trackers->runningHours();
 
-        $hours = $repository->hours(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth());
+        $hours = $trackers->hours(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth());
         $hours += $runningHours; $hours = round($hours, 1);
-        $goal = round((($hours / env('MONTHLY_GOAL', 140)) * 100), 1);
         $earned = (int) ($hours * $rate);
+        $goal = round((($hours / $preferences->getMonthlyGoal()) * 100), 1);
 
-        $thours = $repository->hours(Carbon::now(), Carbon::now());
+        $thours = $trackers->hours(Carbon::now(), Carbon::now());
         $thours += $runningHours; $thours = round($thours, 1);
-
         $tearned = (int) ($thours * $rate);
-        $tgoal = (int) (($thours / env('DAILY_GOAL', 7)) * 100);
+        $tgoal = (int) (($thours / $preferences->getDailyGoal()) * 100);
 
-        $isActive = !!$runningHours;
-        $this->isActive = $isActive;
+        // todo add active task link
+        $this->isActive = $runningHours;
 
         return view('livewire.home', compact([
             'hours', 'goal', 'earned',
             'thours', 'tearned', 'tgoal',
-            'isActive'
         ]));
     }
+
+
 }
