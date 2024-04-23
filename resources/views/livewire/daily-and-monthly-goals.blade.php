@@ -22,4 +22,6 @@
             </div>
         </div>
     </div>
+
+    <a href="/month-review" class="absolute text-gray-600 hover:text-gray-100 hover:border-b hover:cursor-pointer" style="bottom: 24px; right: 48px;">Month review</a>
 </div>
