@@ -16,10 +16,6 @@ class Goals extends Component
 
     public function render(Trackers $trackers, Preferences $preferences)
     {
-        $trackers
-            ->addTracker(new Mayven())
-            ->addTracker(new Everhour());
-
         return $this->response($trackers, $preferences);
     }
 
