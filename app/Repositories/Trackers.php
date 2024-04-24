@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Interfaces\TimeTracker;
 use App\Services\Api\Everhour;
 use App\Services\Api\Mayven;
+use App\Services\Api\Placeholder;
 use App\Types\ProjectTimes;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -21,6 +22,11 @@ class Trackers
 
     public function hydrate(): void
     {
+        if (request()->has('placeholder')) {
+            $this->addTracker(new Placeholder());
+            return; //cheeky
+        }
+
         if (config('services.mayven.auth')) {
             $this->addTracker(new Mayven());
         }
