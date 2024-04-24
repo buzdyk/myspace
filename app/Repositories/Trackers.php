@@ -16,6 +16,7 @@ class Trackers
     public function __construct()
     {
         $this->trackers = new Collection();
+        $this->hydrate();
     }
 
     public function hydrate(): void

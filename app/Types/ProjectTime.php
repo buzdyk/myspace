@@ -15,4 +15,16 @@ class ProjectTime
     {
         return round(($this->seconds / 3600), 2);
     }
+
+    public function toArray(): array
+    {
+        return [
+            'source' => $this->source,
+            'projectId' => $this->projectId,
+            'projectTitle' => $this->projectTitle,
+            'seconds' => $this->seconds,
+            'hours' => $this->getHours(),
+        ];
+    }
+
 }

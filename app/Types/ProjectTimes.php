@@ -43,4 +43,9 @@ class ProjectTimes
         $reducer = fn ($carry, ProjectTime $item) => $item->getHours() + $carry;
         return array_reduce($this->items, $reducer, 0);
     }
+
+    public function toArray(): array
+    {
+        return array_map(fn (ProjectTime $pt) => $pt->toArray(), $this->items);
+    }
 }
