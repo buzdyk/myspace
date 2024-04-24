@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class DailyAndMonthlyGoals extends Component
+class Goals extends Component
 {
     public bool $isActive = false;
 
@@ -44,7 +44,7 @@ class DailyAndMonthlyGoals extends Component
         // todo add a link to the active task
         $this->isActive = $runningHours;
 
-        return view('livewire.daily-and-monthly-goals', compact([
+        return view('livewire.goals', compact([
             'hours', 'goal', 'earned',
             'thours', 'tearned', 'tgoal',
         ]));

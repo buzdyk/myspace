@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class MonthlyTimeByProject extends Component
+class MonthReview extends Component
 {
     public Carbon $dayOfMonth;
 
@@ -21,7 +21,7 @@ class MonthlyTimeByProject extends Component
 
         $map = $trackers->getMonthlyTimeByProject(Carbon::now());
 
-        return view('livewire.monthly-time-by-project', [
+        return view('livewire.month-review', [
             'projects' => $map,
             'hourlyRate' => $preferences->getHourlyRate(),
             'totalHours' => $map->getHours(),

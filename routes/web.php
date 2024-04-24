@@ -2,5 +2,5 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', \App\Livewire\DailyAndMonthlyGoals::class);
-Route::get('/month-review', \App\Livewire\MonthlyTimeByProject::class);
+Route::get('/', \App\Livewire\Goals::class);
+Route::get('/month-review', \App\Livewire\MonthReview::class);
