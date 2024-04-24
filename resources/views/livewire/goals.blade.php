@@ -7,14 +7,14 @@
                 @endif
                 <div>Today</div>
                 <div class="mt-4">{{ $tgoal }}%</div>
-                <div class="mt-2 text-gray-800 hover:text-gray-300">${{ $tearned }}</div>
+                <div class="mt-2 text-gray-800 hover:text-gray-300">${{ number_format($tearned) }}</div>
                 <div class="mt-2 text-gray-800 hover:text-gray-300">{{ $thours }} hours</div>
             </div>
 
             <div class="ml-36">
                 <div>Month</div>
                 <div class="mt-4">{{ $goal }}%</div>
-                <div class="mt-2 text-gray-800 hover:text-gray-300">${{ $earned }}</div>
+                <div class="mt-2 text-gray-800 hover:text-gray-300">${{ number_format($earned) }}</div>
                 <div class="mt-2 text-gray-800 hover:text-gray-300">{{ $hours }} hours</div>
             </div>
         </div>
