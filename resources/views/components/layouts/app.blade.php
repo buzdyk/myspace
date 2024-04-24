@@ -1,7 +1,17 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <title>myspace</title>
+        <head>
+            <title>
+                {{-- todo refactor this crutch to use livewire hints #[Title('goals')] --}}
+                @if(Request::path() === 'month-review')
+                    Month Review - myspace
+                @endif
+                @if(Request::path() === '/')
+                    Goals - myspace
+                @endif
+            </title>
+        </head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://cdn.tailwindcss.com"></script>
