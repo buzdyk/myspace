@@ -71,12 +71,14 @@ class Everhour extends Rest implements TimeTracker
          * temporary solution: we assume a user has only one project in everhour
          */
 
-        return $map->add(new ProjectTime(
-            'everhour',
-            'one-and-only',
-            $this->getProjectName('one-and-only'),
-            $this->getSeconds($som, $eom)
-        ));
+        if ($seconds = $this->getSeconds($som, $eom)) {
+            $map->add(new ProjectTime(
+                'everhour',
+                'one-and-only',
+                $this->getProjectName('one-and-only'),
+                $seconds
+            ));
+        }
 
         return $map;
     }

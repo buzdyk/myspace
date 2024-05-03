@@ -31,6 +31,10 @@ return [
         ],
     ],
 
+    'steam' => [
+        'account_id' => env('STEAM_ACCOUNT_ID')
+    ],
+
     'mayven' => [
         'api_url' => env('MAYVEN_API_URL'),
         'auth' => env('MAYVEN_AUTH'),
