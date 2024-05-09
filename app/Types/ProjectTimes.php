@@ -2,6 +2,8 @@
 
 namespace App\Types;
 
+use Carbon\Carbon;
+
 class ProjectTimes
 {
     protected array $items = [];
@@ -42,6 +44,27 @@ class ProjectTimes
     {
         $reducer = fn ($carry, ProjectTime $item) => $item->getHours() + $carry;
         return array_reduce($this->items, $reducer, 0);
+    }
+
+    public function getDailyHours(Carbon $dayOfMonth): array
+    {
+        $som = $dayOfMonth->copy()->startOfMonth();
+        $eom = $dayOfMonth->copy()->endOfMonth();
+        $days = [];
+
+        while ($som->isBefore($eom)) {
+            $days[$som->toDateString()] = null;
+            $som->addDay(1);
+        }
+
+        $this->rewind();
+
+        while ($item = $this->next()) {
+            $day = $item->datetime->toDateString();
+            $days[$day] += $item->getHours();
+        }
+
+        return $days;
     }
 
     public function toArray(): array

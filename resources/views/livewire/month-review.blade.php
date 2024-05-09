@@ -37,7 +37,20 @@
                 <span wire:click="add" class="text-gray-600 hover:text-gray-100 hover:border-b cursor-pointer">&gt;</span>
             </div>
         @endif
+
     </div>
 
+
+    <div class="absolute text-xs text-gray-600 hover:text-white" style="right:48px">
+        <div class="">
+            @foreach($dailyHours as $dh)
+                <div class="mb-1 flex justify-start">
+                    <span>{{ $dh['day'] }}</span>
+                    <span class="ml-2">{{ $dh['hours'] }}</span>
+                </div>
+            @endforeach
+        </div>
+
+    </div>
     <a href="/" class="absolute text-gray-600 hover:text-gray-100 hover:border-b hover:cursor-pointer" style="bottom: 24px; right: 48px;">Goals</a>
 </div>

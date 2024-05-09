@@ -26,6 +26,28 @@ class Mayven extends Rest implements TimeTracker
         ];
     }
 
+    public function getMonthIntervals(Carbon $dayOfMonth): ProjectTimes
+    {
+        $som = $dayOfMonth->copy()->startOfMonth();
+        $eom = $dayOfMonth->copy()->endOfMonth();
+
+        $res = $this->get("/api/time-statistics", ['query' => [
+            "dateStart" => $som->toDateString() . ' 00:00:00',
+            "dateEnd" => $eom->toDateString() . ' 23:59:59',
+            "users[]" => $this->getUserId(),
+        ]]);
+
+        $items = json_decode($res->getBody()->getContents());
+
+        $times = new ProjectTimes();
+
+        foreach ($items->data->chartData as $item) {
+            $times->add(new ProjectTime('x', 'x', 'x', (int) $item->seconds, new Carbon($item->_date)));
+        }
+
+        return $times;
+    }
+
     public function getSeconds(Carbon $from, Carbon $to): int
     {
         $res = $this->get("/api/time-statistics", ['query' => [

@@ -11,4 +11,5 @@ interface TimeTracker
     public function getSeconds(Carbon $from, Carbon $to): int;
     public function getRunningSeconds(): int;
     public function getMonthlyTimeByProject(Carbon $dayOfMonth): ProjectTimes;
+    public function getMonthIntervals(Carbon $dayOfMonth): ProjectTimes;
 }

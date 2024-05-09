@@ -57,6 +57,28 @@ class Everhour extends Rest implements TimeTracker
         });
     }
 
+    public function getMonthIntervals(Carbon $dayOfMonth): ProjectTimes
+    {
+        $som = $dayOfMonth->copy()->startOfMonth();
+        $eom = $dayOfMonth->copy()->endOfMonth();
+
+        $query = [
+            'from' => $som->toDateString(),
+            'to' => $eom->toDateString(),
+        ];
+
+        $res = $this->get("/users/{$this->getUserId()}/time", ['query' => $query]);
+        $items = json_decode($res->getBody()->getContents());
+
+        $times = new ProjectTimes();
+
+        foreach ($items as $item) {
+            $times->add(new ProjectTime('x', 'x', 'x', (int) $item->time, new Carbon($item->createdAt)));
+        }
+
+        return $times;
+    }
+
     public function getMonthlyTimeByProject(Carbon $dayOfMonth): ProjectTimes
     {
         $som = $dayOfMonth->copy()->startOfMonth();
@@ -65,7 +87,6 @@ class Everhour extends Rest implements TimeTracker
         $map = new ProjectTimes();
 
         /**
-         * $this->get("/projects/{$project->id}/time", ['query' => ['from' => $som->toDateString(), 'to' => $eom->toDateString(),]);
          * the sum of items returned is incorrect (eg 35 hours instead of 62 hours)
          * it's either me missing something or a bug on the everhour side
          * temporary solution: we assume a user has only one project in everhour
@@ -77,8 +98,6 @@ class Everhour extends Rest implements TimeTracker
             $this->getProjectName('one-and-only'),
             $this->getSeconds($som, $eom)
         ));
-
-        return $map;
     }
 
     private function getProjectName(string|int $projectId): string
