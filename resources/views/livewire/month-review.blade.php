@@ -41,7 +41,7 @@
     </div>
 
 
-    <div class="absolute text-xs text-gray-600 hover:text-white" style="right:48px">
+    <div class="absolute text-xs text-gray-600 hover:text-white" style="left:48px">
         <div class="">
             @foreach($dailyHours as $dh)
                 <div class="mb-1 flex justify-start">
@@ -50,7 +50,7 @@
                 </div>
             @endforeach
         </div>
-
     </div>
+
     <a href="/" class="absolute text-gray-600 hover:text-gray-100 hover:border-b hover:cursor-pointer" style="bottom: 24px; right: 48px;">Goals</a>
 </div>

@@ -39,10 +39,29 @@ class Goals extends Component
 
         // todo add a link to the active task
         $this->isActive = $runningHours;
+        $pace = $this->getPace($hours);
 
         return view('livewire.goals', compact([
             'hours', 'goal', 'earned',
             'thours', 'tearned', 'tgoal',
+            'pace'
         ]));
+    }
+
+    private function getPace($hoursTracked)
+    {
+        $dayOfMonth = (new Carbon())->addDay();
+        $month = $dayOfMonth->month;
+        $weekdays = 0;
+
+        while ($dayOfMonth->month === $month) {
+            if ($dayOfMonth->isWeekday()) $weekdays++;
+            $dayOfMonth->addDay();
+        }
+
+        $expectedHours = $weekdays * env('DAILY_GOAL');
+        $remainingHours = env('MONTHLY_GOAL') - $hoursTracked;
+
+        return $expectedHours - $remainingHours;
     }
 }

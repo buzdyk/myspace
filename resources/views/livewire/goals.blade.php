@@ -18,7 +18,17 @@
                 <div class="mt-2 text-gray-800 hover:text-gray-300">{{ $hours }} hours</div>
             </div>
         </div>
+
+        <div class="mt-4 group">
+            <span class="hidden group-hover:inline-block">
+                Pace
+                <span class="{{ $pace < 0 ? 'text-yellow-500' : ($pace > 0 ? 'text-green-500' : '') }}">
+                    {{ $pace < 0 ? '-' : ($pace > 0 ? '+' : '') }}{{ $pace }} hours
+                </span>
+            </span>
+            &nbsp;
+        </div>
     </div>
 
     <a href="/month-review" class="absolute text-gray-600 hover:text-gray-100 hover:border-b hover:cursor-pointer" style="bottom: 24px; right: 48px;">Month review</a>
-</div>
+</span>
