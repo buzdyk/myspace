@@ -28,13 +28,11 @@ class Goals extends Component
         // monthly values
         $hours = $trackers->hours(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth());
         $hours += $runningHours; $hours = round($hours, 1);
-        $earned = (int) ($hours * $rate);
         $goal = round((($hours / $preferences->getMonthlyGoal()) * 100), 1);
 
         // today values
         $thours = $trackers->hours(Carbon::now(), Carbon::now());
         $thours += $runningHours; $thours = round($thours, 1);
-        $tearned = (int) ($thours * $rate);
         $tgoal = (int) (($thours / $preferences->getDailyGoal()) * 100);
 
         // todo add a link to the active task
@@ -42,9 +40,7 @@ class Goals extends Component
         $pace = $this->getPace($hours);
 
         return view('livewire.goals', compact([
-            'hours', 'goal', 'earned',
-            'thours', 'tearned', 'tgoal',
-            'pace'
+            'goal', 'tgoal', 'pace'
         ]));
     }
 
