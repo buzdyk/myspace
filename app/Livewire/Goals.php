@@ -56,7 +56,7 @@ class Goals extends Component
         $expectedHours = $weekdays * env('DAILY_GOAL');
         $remainingHours = env('MONTHLY_GOAL') - $hoursTracked;
 
-        return $expectedHours - $remainingHours;
+        return number_format($expectedHours - $remainingHours, 2);
     }
 
     private function getPaceClass($pace, $dailyGoal)
