@@ -20,7 +20,7 @@
         <div class="mt-4 flex justify-start text-gray-600">
             <div class="w-24">Pace</div>
 
-            <div class="w-24 ml-8 text-right {{ $pace < 0 ? 'text-yellow-500' : ($pace > 0 ? 'text-green-400' : '') }}">
+            <div class="w-24 ml-8 text-right {{ $paceClass }}">
                 {{ $pace }}
             </div>
             &nbsp;

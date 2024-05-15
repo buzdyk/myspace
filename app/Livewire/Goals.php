@@ -21,8 +21,6 @@ class Goals extends Component
 
     protected function response(Trackers $trackers, Preferences $preferences): View
     {
-        $rate = $preferences->getHourlyRate();
-
         $runningHours = $trackers->runningHours();
 
         // monthly values
@@ -35,12 +33,12 @@ class Goals extends Component
         $thours += $runningHours; $thours = round($thours, 1);
         $tgoal = (int) (($thours / $preferences->getDailyGoal()) * 100);
 
-        // todo add a link to the active task
         $this->isActive = $runningHours;
         $pace = $this->getPace($hours);
+        $paceClass = $this->getPaceClass($pace, $preferences->getDailyGoal());
 
         return view('livewire.goals', compact([
-            'goal', 'tgoal', 'pace'
+            'goal', 'tgoal', 'pace', 'paceClass'
         ]));
     }
 
@@ -59,5 +57,18 @@ class Goals extends Component
         $remainingHours = env('MONTHLY_GOAL') - $hoursTracked;
 
         return $expectedHours - $remainingHours;
+    }
+
+    private function getPaceClass($pace, $dailyGoal)
+    {
+        switch ($pace) {
+            case $pace < -$dailyGoal:
+                return 'text-red-600';
+            case $pace > 0:
+                return 'text-green-600';
+            default:
+                return 'text-gray-600';
+        }
+
     }
 }
