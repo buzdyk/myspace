@@ -67,8 +67,7 @@ class Goals extends Component
             case $pace > 0:
                 return 'text-green-600';
             default:
-                return 'text-gray-600';
+                return '';
         }
-
     }
 }
