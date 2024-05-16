@@ -36,9 +36,9 @@ class Trackers
             $this->addTracker(new Everhour());
         }
 
-        if (config('services.steam.account_id')) {
-            $this->addTracker(new Dota2());
-        }
+//        if (config('services.steam.account_id')) {
+//            $this->addTracker(new Dota2());
+//        }
     }
 
     public function addTracker(TimeTracker $tracker): self
