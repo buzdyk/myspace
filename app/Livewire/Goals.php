@@ -34,7 +34,7 @@ class Goals extends Component
         $tgoal = (int) (($thours / $preferences->getDailyGoal()) * 100);
 
         $this->isActive = $runningHours;
-        $pace = $this->getPace($hours);
+        $pace = $this->getPace($hours, $preferences);
         $paceClass = $this->getPaceClass($pace, $preferences->getDailyGoal());
 
         return view('livewire.goals', compact([
@@ -42,7 +42,7 @@ class Goals extends Component
         ]));
     }
 
-    private function getPace($hoursTracked)
+    private function getPace($hoursTracked, Preferences $preferences)
     {
         $dayOfMonth = (new Carbon())->addDay();
         $month = $dayOfMonth->month;
@@ -53,8 +53,8 @@ class Goals extends Component
             $dayOfMonth->addDay();
         }
 
-        $expectedHours = $weekdays * env('DAILY_GOAL');
-        $remainingHours = env('MONTHLY_GOAL') - $hoursTracked;
+        $expectedHours = $weekdays * $preferences->getDailyGoal();
+        $remainingHours = $preferences->getMonthlyGoal() - $hoursTracked;
 
         return number_format($expectedHours - $remainingHours, 1);
     }

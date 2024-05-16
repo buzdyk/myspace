@@ -43,7 +43,7 @@
 
     <div class="absolute h-screen flex items-center pr-36 text-xs text-gray-600 hover:text-white" style="left:48px">
         <div class="">
-            <div class="mb-1 flex justify-start text-gray-600">
+            <div class="mb-4 flex justify-start text-gray-600">
                 <div class="w-8">Day</div>
                 <div class="w-16 ml-8 text-left">Hours</div>
                 <div class="w-24 text-gray-800 group-hover:text-gray-600">
