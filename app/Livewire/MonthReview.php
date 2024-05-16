@@ -44,7 +44,8 @@ class MonthReview extends Component
             $carbon = new Carbon($date);
             $dailyHours[$date] = [
                 'hours' => $hours,
-                'day' => $carbon->format('d')
+                'day' => $carbon->format('d'),
+                'dow' => $carbon->format('l')
             ];
         }
         $this->dailyHours = $dailyHours;

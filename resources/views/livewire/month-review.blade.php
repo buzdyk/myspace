@@ -41,12 +41,24 @@
     </div>
 
 
-    <div class="absolute text-xs text-gray-600 hover:text-white" style="left:48px">
+    <div class="absolute h-screen flex items-center pr-36 text-xs text-gray-600 hover:text-white" style="left:48px">
         <div class="">
+            <div class="mb-1 flex justify-start text-gray-600">
+                <div class="w-8">Day</div>
+                <div class="w-16 ml-8 text-left">Hours</div>
+                <div class="w-24 text-gray-800 group-hover:text-gray-600">
+                    &nbsp;
+                </div>
+            </div>
             @foreach($dailyHours as $dh)
-                <div class="mb-1 flex justify-start">
-                    <span>{{ $dh['day'] }}</span>
-                    <span class="ml-2">{{ $dh['hours'] }}</span>
+                <div class="mb-1 flex justify-start group">
+                    <div class="w-8">
+                        {{ $dh['day'] }}
+                    </div>
+                    <div class="w-16 ml-8">{!! $dh['hours'] ?? '&nbsp;' !!}</div>
+                    <div class="w-24 text-gray-800 group-hover:text-gray-600">
+                        {{ $dh['dow'] }}
+                    </div>
                 </div>
             @endforeach
         </div>
