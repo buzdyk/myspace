@@ -21,28 +21,53 @@ class Goals extends Component
 
     protected function response(Trackers $trackers, Preferences $preferences): View
     {
-        $rate = $preferences->getHourlyRate();
-
         $runningHours = $trackers->runningHours();
 
         // monthly values
         $hours = $trackers->hours(Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth());
         $hours += $runningHours; $hours = round($hours, 1);
-        $earned = (int) ($hours * $rate);
         $goal = round((($hours / $preferences->getMonthlyGoal()) * 100), 1);
 
         // today values
         $thours = $trackers->hours(Carbon::now(), Carbon::now());
         $thours += $runningHours; $thours = round($thours, 1);
-        $tearned = (int) ($thours * $rate);
         $tgoal = (int) (($thours / $preferences->getDailyGoal()) * 100);
 
-        // todo add a link to the active task
         $this->isActive = $runningHours;
+        $pace = $this->getPace($hours, $preferences);
+        $paceClass = $this->getPaceClass($pace, $preferences->getDailyGoal());
 
         return view('livewire.goals', compact([
-            'hours', 'goal', 'earned',
-            'thours', 'tearned', 'tgoal',
+            'goal', 'tgoal', 'pace', 'paceClass'
         ]));
+    }
+
+    private function getPace($hoursTracked, Preferences $preferences)
+    {
+        $dayOfMonth = (new Carbon())->addDay();
+        $month = $dayOfMonth->month;
+        $weekdays = 0;
+
+        while ($dayOfMonth->month === $month) {
+            if ($dayOfMonth->isWeekday()) $weekdays++;
+            $dayOfMonth->addDay();
+        }
+
+        $expectedHours = $weekdays * $preferences->getDailyGoal();
+        $remainingHours = $preferences->getMonthlyGoal() - $hoursTracked;
+
+        return number_format($expectedHours - $remainingHours, 1);
+    }
+
+    private function getPaceClass($pace, $dailyGoal)
+    {
+        switch ($pace) {
+            case $pace < -$dailyGoal:
+                return 'text-red-600';
+            case $pace > 0:
+                return 'text-green-600';
+            default:
+                return '';
+        }
     }
 }

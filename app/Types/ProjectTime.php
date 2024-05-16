@@ -2,6 +2,8 @@
 
 namespace App\Types;
 
+use Carbon\Carbon;
+
 class ProjectTime
 {
     public function __construct(
@@ -9,6 +11,7 @@ class ProjectTime
         public string $projectId,
         public string $projectTitle,
         public int $seconds,
+        public null|Carbon $datetime = null
     ) {}
 
     public function getHours(): float
@@ -24,6 +27,7 @@ class ProjectTime
             'projectTitle' => $this->projectTitle,
             'seconds' => $this->seconds,
             'hours' => $this->getHours(),
+            'datetime' => $this->datetime
         ];
     }
 

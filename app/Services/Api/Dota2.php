@@ -68,4 +68,9 @@ class Dota2 extends Rest implements TimeTracker
             return json_decode($res->getBody()->getContents());
         });
     }
+
+    public function getMonthIntervals(Carbon $dayOfMonth): ProjectTimes
+    {
+        return new ProjectTimes();
+    }
 }

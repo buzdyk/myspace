@@ -73,4 +73,16 @@ class Trackers
 
         return $map;
     }
+
+    public function getDailyHours(Carbon $dayOfMonth): array
+    {
+        $map = new ProjectTimes();
+
+        /** @var TimeTracker $tracker */
+        foreach ($this->trackers as $tracker) {
+            $map->merge($tracker->getMonthIntervals($dayOfMonth));
+        }
+
+        return $map->getDailyHours($dayOfMonth);
+    }
 }
