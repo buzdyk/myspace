@@ -3,6 +3,7 @@
 namespace App\Services\Api;
 
 use App\Interfaces\TimeTracker;
+use App\Repositories\Preferences;
 use App\Types\ProjectTimes;
 use App\Types\ProjectTime;
 use Carbon\Carbon;
@@ -47,6 +48,20 @@ class Placeholder implements TimeTracker
 
     public function getMonthIntervals(Carbon $dayOfMonth): ProjectTimes
     {
-        return new ProjectTimes();
+        $som = (new Carbon())->startOfMonth();
+        $eom = (new Carbon());
+
+        $pt = new ProjectTimes();
+
+        while ($som->lte($eom)) {
+            if ($som->isWeekday()) {
+                $seconds = random_int(4*60*60, 10*60*60);
+                $pt->add(new ProjectTime('x', 'x', 'x', $seconds, $som->copy()));
+            }
+
+            $som->addDay();
+        }
+
+        return $pt;
     }
 }
