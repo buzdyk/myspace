@@ -24,7 +24,7 @@
                     {{ $goal }}%
                 </div>
                 <div class="w-32 ml-8 {{ $paceClass }}">
-                    {{ $pace }}h
+                    {{ abs($pace) }}h
                 </div>
             </div>
         </div>
