@@ -2,7 +2,7 @@
     $pages = ['today' => 'Today', 'month-review' => 'Month Review', 'wishlist' => 'Wishlist'];
     $active = $active ?? '??';
 
-    if (env('WISHLIST_ON') === false) {
+    if (env('WISHLIST_ON') !== true) {
         unset($pages['wishlist']);
     }
 ?>
