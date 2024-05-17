@@ -44,4 +44,9 @@ class Placeholder implements TimeTracker
 
         return $map;
     }
+
+    public function getMonthIntervals(Carbon $dayOfMonth): ProjectTimes
+    {
+        return new ProjectTimes();
+    }
 }

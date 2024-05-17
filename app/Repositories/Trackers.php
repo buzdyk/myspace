@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Interfaces\TimeTracker;
+use App\Services\Api\Dota2;
 use App\Services\Api\Everhour;
 use App\Services\Api\Mayven;
 use App\Services\Api\Placeholder;
@@ -34,6 +35,10 @@ class Trackers
         if (config('services.everhour.token')) {
             $this->addTracker(new Everhour());
         }
+
+//        if (config('services.steam.account_id')) {
+//            $this->addTracker(new Dota2());
+//        }
     }
 
     public function addTracker(TimeTracker $tracker): self

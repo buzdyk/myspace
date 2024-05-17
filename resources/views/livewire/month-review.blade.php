@@ -45,17 +45,14 @@
         <div class="">
             <div class="mb-4 flex justify-start text-gray-600">
                 <div class="w-8">Day</div>
-                <div class="w-16 ml-8 text-left">Hours</div>
-                <div class="w-24 text-gray-800 group-hover:text-gray-600">
-                    &nbsp;
-                </div>
+                <div class="w-16 ml-2 text-left">Hours</div>
             </div>
             @foreach($dailyHours as $dh)
                 <div class="mb-1 flex justify-start group">
                     <div class="w-8">
                         {{ $dh['day'] }}
                     </div>
-                    <div class="w-16 ml-8">{!! $dh['hours'] ?? '&nbsp;' !!}</div>
+                    <div class="w-16 ml-2">{{ $dh['hours'] }}</div>
                     <div class="w-24 text-gray-800 group-hover:text-gray-600">
                         {{ $dh['dow'] }}
                     </div>
@@ -64,5 +61,5 @@
         </div>
     </div>
 
-    <a href="/" class="absolute text-gray-600 hover:text-gray-100 hover:border-b hover:cursor-pointer" style="bottom: 24px; right: 48px;">Goals</a>
+    @include('menu', ['active' => 'month-review'])
 </div>
