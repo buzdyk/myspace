@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Interfaces\TimeTracker;
+use App\Services\Api\Clockify;
 use App\Services\Api\Dota2;
 use App\Services\Api\Everhour;
 use App\Services\Api\Mayven;
@@ -34,6 +35,10 @@ class Trackers
 
         if (config('services.everhour.token')) {
             $this->addTracker(new Everhour());
+        }
+
+        if (config('services.clockify.token')) {
+            $this->addTracker(new Clockify());
         }
 
 //        if (config('services.steam.account_id')) {
