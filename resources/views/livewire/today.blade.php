@@ -17,15 +17,24 @@
             </div>
 
             <div class="mt-4 flex justify-between">
-                <div class="ml-8 w-32">
-                    {{ $tgoal }}%
+                <div class="ml-8 w-32 group">
+                    <span class="group-hover:hidden">{{ $tgoal }}%</span>
+                    <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
+                        {{ $thours }}h
+                    </span>
                 </div>
-                <div class="ml-8 w-32">
-                    {{ $goal }}%
+                <div class="ml-8 w-32 group">
+                    <span class="group-hover:hidden">{{ $goal }}%</span>
+                    <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
+                        {{ $hours }}h
+                    </span>
                 </div>
                 <div class="w-32 ml-8 {{ $paceClass }}">
                     {{ abs($pace) }}h
                 </div>
+            </div>
+
+            <div class="mt-4 flex justify-start">
             </div>
         </div>
     </div>

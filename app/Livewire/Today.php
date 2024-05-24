@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\View\View;
 use Livewire\Component;
 
-class Goals extends Component
+class Today extends Component
 {
     public bool $isActive = false;
 
@@ -37,8 +37,8 @@ class Goals extends Component
         $pace = $this->getPace($hours, $preferences);
         $paceClass = $this->getPaceClass($pace, $preferences->getDailyGoal());
 
-        return view('livewire.goals', compact([
-            'goal', 'tgoal', 'pace', 'paceClass'
+        return view('livewire.today', compact([
+            'goal', 'tgoal', 'pace', 'paceClass', 'thours', 'hours'
         ]));
     }
 
