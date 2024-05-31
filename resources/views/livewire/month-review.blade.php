@@ -16,7 +16,7 @@
             @foreach ($projects as $project)
                 <div class="flex justify-between">
                     <div class="w-2/4">{{ $project['projectTitle'] }}</div>
-                    <div class="w-1/4 text-left">{{ $project['hours'] }}</div>
+                    <div class="w-1/4 text-left">{{ hoursToString($project['hours']) }}</div>
                     <div class="w-1/4 text-left">
                         ${{ number_format($project['hours'] * $hourlyRate) }}
                     </div>
@@ -25,7 +25,7 @@
 
             <div class="flex justify-between mt-4">
                 <div class="w-2/4">&nbsp;</div>
-                <div class="w-1/4 text-left">{{ $totalHours }}</div>
+                <div class="w-1/4 text-left">{{ hoursToString($totalHours) }}</div>
                 <div class="w-1/4 text-left">
                     ${{ number_format($totalHours * $hourlyRate) }}
                 </div>

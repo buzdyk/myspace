@@ -20,17 +20,17 @@
                 <div class="ml-8 w-32 group">
                     <span class="group-hover:hidden">{{ $tgoal }}%</span>
                     <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                        {{ $thours }}h
+                        {{ hoursToString($thours) }}
                     </span>
                 </div>
                 <div class="ml-8 w-32 group">
                     <span class="group-hover:hidden">{{ $goal }}%</span>
                     <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                        {{ $hours }}h
+                        {{ hoursToString($hours) }}
                     </span>
                 </div>
                 <div class="w-32 ml-8 {{ $paceClass }}">
-                    {{ abs($pace) }}h
+                    {{ hoursToString(abs($pace)) }}
                 </div>
             </div>
 
