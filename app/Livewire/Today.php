@@ -44,8 +44,9 @@ class Today extends Component
 
     private function getPace($hoursTracked, Preferences $preferences)
     {
-        $dayOfMonth = (new Carbon())->addDay();
+        $dayOfMonth = (new Carbon());
         $month = $dayOfMonth->month;
+        $dayOfMonth->addDay();
         $weekdays = 0;
 
         while ($dayOfMonth->month === $month) {
