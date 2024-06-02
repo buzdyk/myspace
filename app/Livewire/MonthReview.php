@@ -43,7 +43,7 @@ class MonthReview extends Component
         foreach ($dailyHours as $date => $hours) {
             $carbon = new Carbon($date);
             $dailyHours[$date] = [
-                'hours' => $hours,
+                'hours' => hoursToString($hours),
                 'day' => $carbon->format('d'),
                 'dow' => $carbon->format('l')
             ];
