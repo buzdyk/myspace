@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+    app:
+        build:
+            context: .docker/app
+            args:
+                # override your user identity for assignment of access rights
+                PUID: "1000"
+        ports:
+            - 9077:80
+        volumes:
+            - ./:/var/www
+            - ./.docker/app/50-custom.ini:/usr/local/etc/php/conf.d/50-custom.ini
+        links:
+            - db
+
+    db:
+        image: mysql:8.0
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: myspace
+            MYSQL_USER: myspace
+            MYSQL_PASSWORD: myspace
+        volumes:
+            - db-data:/var/lib/mysql
+        ports:
+            - "33061:3306"
+
+volumes:
+    db-data:
