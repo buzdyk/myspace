@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Api;
+namespace App\Trackers;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;

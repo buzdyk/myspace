@@ -20,22 +20,25 @@
                 <div class="ml-8 w-32 group">
                     <span class="group-hover:hidden">{{ $tgoal }}%</span>
                     <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                        {{ hoursToString($thours) }}
+                        {{ hoursToString($thours, false) }}
                     </span>
                 </div>
                 <div class="ml-8 w-32 group">
                     <span class="group-hover:hidden">{{ $goal }}%</span>
                     <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                        {{ hoursToString($hours) }}
+                        {{ hoursToString($hours, false) }}
                     </span>
                 </div>
                 <div class="w-32 ml-8 {{ $paceClass }}">
-                    {{ hoursToString(abs($pace)) }}
+                    {{ hoursToString(abs($pace), false) }}
                 </div>
             </div>
 
-            <div class="mt-4 flex justify-start">
-            </div>
+{{--            progress bar --}}
+{{--            <div class="mt-8 flex justify-start">--}}
+{{--                <div style="width: {{ $passed }}%; height: 3px;" class="bg-gray-600">&nbsp;</div>--}}
+{{--                <div style="width: {{ 100 - $passed }}%;  height: 3px;" class="bg-gray-700">&nbsp;</div>--}}
+{{--            </div>--}}
         </div>
     </div>
 

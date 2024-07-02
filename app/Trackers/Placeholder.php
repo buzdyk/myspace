@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Api;
+namespace App\Trackers;
 
 use App\Interfaces\TimeTracker;
 use App\Repositories\Preferences;
@@ -24,9 +24,7 @@ class Placeholder implements TimeTracker
 
     public function getRunningSeconds(): int
     {
-        $now = Carbon::now();
-
-        return $now->minutes * 60 + $now->seconds;
+        return rand(0, 10000);
     }
 
     public function getMonthlyTimeByProject(Carbon $dayOfMonth): ProjectTimes
