@@ -8,3 +8,5 @@ Route::get('/', function() {
 Route::get('/today', \App\Livewire\Today::class);
 Route::get('/month-review', \App\Livewire\MonthReview::class);
 Route::get('/wishlist', \App\Livewire\Wishlist::class);
+
+Route::get('/today/inertia', fn () => Inertia\Inertia::render('Today', []));
