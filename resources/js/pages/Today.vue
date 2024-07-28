@@ -24,7 +24,7 @@ const paceClass = computed(() => {
     return ''
 })
 
-setInterval(() => router.visit(window.location.pathname, {
+setTimeout(() => router.visit(window.location.pathname, {
     except: ['users'],
 }), 15000)
 </script>
