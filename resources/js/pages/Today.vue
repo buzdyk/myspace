@@ -1,16 +1,32 @@
 <script setup>
 import Navigation from './../components/Navigation.vue'
+import { router, usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
 
-const isActive = true // todo make a prop
-// <div wire:poll.10s>
-const hoursToString = (hours, b) => hours
-// hours, thours pace, tgoal goal
-const hours = 123,
-    thours = 7,
-    pace = 13.5,
-    tgoal = 8,
-    goal = 154,
-    paceClass = ''
+const hoursToString = (number) =>
+    Math.floor(number) + ':' +
+    Math.round((number - Math.floor(number)) * 60).toString().padStart(2, '0')
+
+const props = defineProps({
+    isActive: { type: Boolean, required: true },
+    todayPercent: { type: Number, required: true },
+    monthPercent: { type: Number, required: true },
+    todayHours: { type: Number, required: true },
+    monthHours: { type: Number, required: true },
+    pace: { type: Number, required: true },
+})
+
+const dailyGoal = computed(() => usePage().props.dailyGoal)
+
+const paceClass = computed(() => {
+    if (props.pace < -dailyGoal.value) return 'text-red-600'
+    if (props.pace > 0) return 'text-green-600'
+    return ''
+})
+
+setInterval(() => router.visit(window.location.pathname, {
+    except: ['users'],
+}), 15000)
 </script>
 
 <template>
@@ -19,7 +35,7 @@ const hours = 123,
         <div class="flex justify-between">
             <div class="relative ml-8 w-32 text-gray-600">
                 Today
-                <div v-if="isActive" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -30px; top: 12px;"></div>
+                <div v-if="props.isActive" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -30px; top: 12px;"></div>
             </div>
             <div class="ml-8 w-32 text-gray-600">Month</div>
             <div class="ml-8 w-32 text-gray-600">Pace</div>
@@ -27,20 +43,19 @@ const hours = 123,
 
         <div class="mt-4 flex justify-between">
             <div class="ml-8 w-32 group">
-                <span class="group-hover:hidden">{{ tgoal }}%</span>
+                <span class="group-hover:hidden">{{ props.todayPercent }}%</span>
                 <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                {{ hoursToString(thours, false) }}
+                {{ hoursToString(props.todayHours) }}
             </span>
             </div>
             <div class="ml-8 w-32 group">
-                <span class="group-hover:hidden">{{ goal }}%</span>
+                <span class="group-hover:hidden">{{ props.monthPercent }}%</span>
                 <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                {{ hoursToString(hours, false) }}
+                {{ hoursToString(props.monthHours) }}
             </span>
             </div>
-            <div class="w-32 ml-8 {{ paceClass }}">
-                <!-- todo abs() -->
-                {{ hoursToString(pace, false) }}
+            <div class="w-32 ml-8" :class="paceClass">
+                {{ hoursToString(Math.abs(props.pace)) }}
             </div>
         </div>
 
