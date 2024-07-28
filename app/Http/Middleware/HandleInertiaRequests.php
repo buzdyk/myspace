@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Repositories\Preferences;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -16,9 +17,12 @@ class HandleInertiaRequests extends Middleware
 
     public function share(Request $request): array
     {
+        /** @var Preferences $preferences */
+        $preferences = app(Preferences::class);
         return array_merge(parent::share($request), [
-            'monthlyGoal' => env('MONTHLY_GOAL'),
-            'dailyGoal' => env('DAILY_GOAL'),
+            'monthlyGoal' => $preferences->getMonthlyGoal(),
+            'dailyGoal' => $preferences->getDailyGoal(),
+            'hourlyRate' => $preferences->getHourlyRate(),
         ]);
     }
 }

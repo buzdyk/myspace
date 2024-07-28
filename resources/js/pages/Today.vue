@@ -66,6 +66,6 @@ setInterval(() => router.visit(window.location.pathname, {
 <!--            </div>-->
     </div>
 
-    <Navigation />
+    <Navigation active="today" />
 </div>
 </template>
