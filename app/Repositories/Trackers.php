@@ -3,11 +3,11 @@
 namespace App\Repositories;
 
 use App\Interfaces\TimeTracker;
-use App\Services\Api\Clockify;
-use App\Services\Api\Dota2;
-use App\Services\Api\Everhour;
-use App\Services\Api\Mayven;
-use App\Services\Api\Placeholder;
+use App\Trackers\Clockify;
+use App\Trackers\Dota2;
+use App\Trackers\Everhour;
+use App\Trackers\Mayven;
+use App\Trackers\Placeholder;
 use App\Types\ProjectTimes;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

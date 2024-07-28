@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Api;
+namespace App\Trackers;
 
 use App\Interfaces\TimeTracker;
 use App\Types\ProjectTimes;

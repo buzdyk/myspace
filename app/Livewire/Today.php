@@ -37,27 +37,40 @@ class Today extends Component
         $pace = $this->getPace($hours, $preferences);
         $paceClass = $this->getPaceClass($pace, $preferences->getDailyGoal());
 
+        list ($remaining, $total) = $this->getWeekdaysMeta();
+        $passed = ($total - $remaining) / $total;
+        $passed = (int) ($passed * 100);
+
         return view('livewire.today', compact([
-            'goal', 'tgoal', 'pace', 'paceClass', 'thours', 'hours'
+            'goal', 'tgoal', 'pace', 'paceClass', 'thours', 'hours', 'passed'
         ]));
     }
 
     private function getPace($hoursTracked, Preferences $preferences)
     {
-        $dayOfMonth = (new Carbon());
-        $month = $dayOfMonth->month;
-        $dayOfMonth->addDay();
-        $weekdays = 0;
+        list($remaining, ) = $this->getWeekdaysMeta();
 
-        while ($dayOfMonth->month === $month) {
-            if ($dayOfMonth->isWeekday()) $weekdays++;
-            $dayOfMonth->addDay();
-        }
-
-        $expectedHours = $weekdays * $preferences->getDailyGoal();
+        $expectedHours = $remaining * $preferences->getDailyGoal();
         $remainingHours = $preferences->getMonthlyGoal() - $hoursTracked;
 
         return number_format($expectedHours - $remainingHours, 1);
+    }
+
+    private function getWeekdaysMeta(): array
+    {
+        $today = new Carbon;
+        $month = $today->month;
+        $total = $remaining = 0;
+
+        $som = $today->copy()->startOfMonth();
+        while ($som->month === $month) {
+            $som->isWeekday() && $total++;
+            $som->isWeekday() && $som->isAfter($today) && $remaining++;
+
+            $som->addDay();
+        }
+
+        return [$remaining, $total];
     }
 
     private function getPaceClass($pace, $dailyGoal)
