@@ -16,7 +16,7 @@ class Today
     public function toArray(): array
     {
         return [
-            'isActive' => $this->isActive(),
+            'runningHours' => $this->runningHours(),
             'todayHours' => $this->todayHours(),
             'monthHours' => $this->monthHours(),
             'todayPercent' => $this->todayPercent(),
@@ -40,14 +40,9 @@ class Today
         return $this->cache->getMonthHours();
     }
 
-    public function isActive()
-    {
-        return !! $this->runningHours();
-    }
-
     public function todayPercent()
     {
-        return round(($this->todayHours() / $this->preferences->getDailyGoal()) * 100, 2);
+        return (int) (($this->todayHours() / $this->preferences->getDailyGoal()) * 100);
     }
 
     public function monthPercent()

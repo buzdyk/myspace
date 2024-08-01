@@ -22,7 +22,7 @@ class TodayCache
 
     public function getMonthHours(): int|float
     {
-        return Cache()->get(static::RUNNING_HOURS) ?? 0;
+        return Cache()->get(static::MONTH_HOURS) ?? 0;
     }
 
     public function setRunningHours(float|int $hours): static

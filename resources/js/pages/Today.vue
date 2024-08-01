@@ -8,7 +8,7 @@ const hoursToString = (number) =>
     Math.round((number - Math.floor(number)) * 60).toString().padStart(2, '0')
 
 const props = defineProps({
-    isActive: { type: Boolean, required: true },
+    runningHours: { type: Number, required: true },
     todayPercent: { type: Number, required: true },
     monthPercent: { type: Number, required: true },
     todayHours: { type: Number, required: true },
@@ -35,7 +35,10 @@ setTimeout(() => router.visit(window.location.pathname, {
         <div class="flex justify-between">
             <div class="relative ml-8 w-32 text-gray-600">
                 Today
-                <div v-if="props.isActive" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -30px; top: 12px;"></div>
+                <div v-if="props.runningHours" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -45px; top: 12px;"></div>
+                <div v-if="props.runningHours"
+                     class="absolute text-sm px-4 py-2 font-bold text-gray-700 hover:text-gray-200 cursor-none"
+                     style="left: -135px; top: 0px;">{{ hoursToString(props.runningHours) }}</div>
             </div>
             <div class="ml-8 w-32 text-gray-600">Month</div>
             <div class="ml-8 w-32 text-gray-600">Pace</div>
