@@ -9,28 +9,40 @@ class Today
 {
     public function __construct(
         protected Trackers $trackers,
+        protected TodayCache $cache,
         protected Preferences $preferences,
     ) {}
 
+    public function toArray(): array
+    {
+        return [
+            'isActive' => $this->isActive(),
+            'todayHours' => $this->todayHours(),
+            'monthHours' => $this->monthHours(),
+            'todayPercent' => $this->todayPercent(),
+            'monthPercent' => $this->monthPercent(),
+            'pace' => $this->pace(),
+        ];
+    }
+
     public function runningHours()
     {
-        return $this->trackers->runningHours();
+        return $this->cache->getRunningHours();
+    }
+
+    public function todayHours()
+    {
+        return $this->cache->getTodayHours();
+    }
+
+    public function monthHours()
+    {
+        return $this->cache->getMonthHours();
     }
 
     public function isActive()
     {
         return !! $this->runningHours();
-    }
-
-    public function todayHours()
-    {
-        return $this->trackers->hours(now(), now());
-    }
-
-    public function monthHours()
-    {
-        $som = now()->startOfMonth(); $eom = now()->endOfMonth();
-        return $this->trackers->hours($som, $eom) + $this->runningHours();
     }
 
     public function todayPercent()
@@ -40,7 +52,7 @@ class Today
 
     public function monthPercent()
     {
-        return ($this->monthHours() / $this->preferences->getMonthlyGoal()) * 100;
+        return round(($this->monthHours() / $this->preferences->getMonthlyGoal()) * 100, 2);
     }
 
     public function pace()
