@@ -10,7 +10,7 @@ use Inertia\Inertia;
 
 class TodayController extends Controller
 {
-    public function index(Trackers $trackers, Preferences $preferences)
+    public function index(Trackers $trackers, Preferences $preferences, $todayRepository)
     {
 //        list ($remaining, $total) = $this->getWeekdaysMeta();
 //        $passed = ($total - $remaining) / $total;

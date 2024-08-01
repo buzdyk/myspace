@@ -73,7 +73,7 @@ const project = props.projects
                 <div class="w-8">
                     {{ dh.day }}
                 </div>
-                <div class="w-16 ml-2">{{ dh.hours }}</div>
+                <div class="w-16 ml-2">{{ dh.hours ? hoursToString(dh.hours) : null }}</div>
                 <div class="w-24 text-gray-800 group-hover:text-gray-600">
                     {{ dh.dow }}
                 </div>
