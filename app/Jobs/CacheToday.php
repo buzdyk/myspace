@@ -1,16 +1,25 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Jobs;
 
 use App\Repositories\TodayCache;
 use App\Repositories\Trackers;
-use Illuminate\Console\Command;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 
-class InvalidateTodayCache extends Command
+class CacheToday implements ShouldQueue, ShouldBeUnique
 {
-    protected $signature = 'today:invalidate-cache';
-    protected $description = 'Command description';
+    use Queueable, Dispatchable;
+
+    public int $uniqueFor = 120;
+
+    public function __construct()
+    {
+        //
+    }
 
     public function handle(Trackers $trackers, TodayCache $cache)
     {
@@ -24,5 +33,10 @@ class InvalidateTodayCache extends Command
         $som = now()->startOfMonth(); $eom = now()->endOfMonth();
         $value = $trackers->hours($som, $eom) + $cache->getRunningHours();
         $cache->setMonthHours($value);
+    }
+
+    public function uniqueId()
+    {
+        return 'today_cache_job';
     }
 }
