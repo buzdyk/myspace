@@ -1,8 +1,8 @@
 <script setup>
-import { usePage } from '@inertiajs/vue3'
-import { computed } from "vue"
 import Navigation from "../components/Navigation.vue"
-const hourlyRate = computed(() => usePage().props.hourlyRate)
+import EmptyPlaceholder from './month/EmptyPlaceholder.vue'
+import Overview from './month/Overview.vue'
+import DailyHours from './month/DailyHours.vue'
 
 const props = defineProps({
     projects: { type: Array, required: true },
@@ -12,47 +12,13 @@ const props = defineProps({
     prevMonthLink: { type: String, required: true },
     nextMonthLink: { type: String, required: true },
 })
-
-const hoursToString = (number) =>
-    Math.floor(number) + ':' +
-    Math.round((number - Math.floor(number)) * 60).toString().padStart(2, '0')
-
-const project = props.projects
 </script>
 
 <template>
 <div class="h-screen flex items-center justify-center font-mono">
     <div class="w-1/2 text-2xl selection:bg-red-700 selection:text-white">
-
-        <h1 v-if="projects.length === 0">
-            Time not found for the month
-        </h1>
-
-        <div v-else class="flex justify-between mb-4 text-gray-600">
-            <div class="w-2/4">
-                <span>Project</span>
-            </div>
-            <div class="w-1/4 text-left">
-                <span>Hours</span>
-            </div>
-            <div class="w-1/4">Earned</div>
-        </div>
-
-        <div v-for="project in projects" class="flex justify-between">
-            <div class="w-2/4">{{ project.projectTitle }}</div>
-            <div class="w-1/4 text-left">{{ hoursToString(project.hours) }}</div>
-            <div class="w-1/4 text-left">
-                ${{ (project.hours * hourlyRate).toFixed(0) }}
-            </div>
-        </div>
-
-        <div v-if="projects.length > 0" class="flex justify-between mt-8">
-            <div class="w-2/4">&nbsp;</div>
-            <div class="w-1/4 text-left">{{ hoursToString(monthHours) }}</div>
-            <div class="w-1/4 text-left">
-                ${{ (monthHours * hourlyRate).toFixed(0) }}
-            </div>
-        </div>
+        <Overview v-if="monthHours" :projects="props.projects" :monthHours="props.monthHours" />
+        <EmptyPlaceholder v-else />
 
         <div class="mt-16">
             {{ props.dayOfMonth }}
@@ -62,23 +28,8 @@ const project = props.projects
         </div>
     </div>
 
-
-    <div v-if="projects.length > 0" class="absolute h-screen flex items-center pr-36 text-xs text-gray-600 hover:text-white" style="left:48px">
-        <div class="">
-            <div class="mb-4 flex justify-start text-gray-600">
-                <div class="w-8">Day</div>
-                <div class="w-16 ml-2 text-left">Hours</div>
-            </div>
-            <div v-for="dh in dailyHours" class="mb-1 flex justify-start group">
-                <div class="w-8">
-                    {{ dh.day }}
-                </div>
-                <div class="w-16 ml-2">{{ dh.hours ? hoursToString(dh.hours) : null }}</div>
-                <div class="w-24 text-gray-800 group-hover:text-gray-600">
-                    {{ dh.dow }}
-                </div>
-            </div>
-        </div>
+    <div v-if="monthHours" class="absolute h-screen flex items-center pr-36 text-xs text-gray-600 hover:text-white" style="left:48px">
+        <DailyHours :daily-hours="props.dailyHours" />
     </div>
 
     <Navigation active="month" />
