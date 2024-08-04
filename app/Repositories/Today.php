@@ -2,9 +2,6 @@
 
 namespace App\Repositories;
 
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
-
 class Today
 {
     public function __construct(
@@ -12,6 +9,11 @@ class Today
         protected TodayCache $cache,
         protected Preferences $preferences,
     ) {}
+
+    public function hasData(): bool
+    {
+        return $this->runningHours() || $this->monthHours();
+    }
 
     public function toArray(): array
     {

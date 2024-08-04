@@ -11,7 +11,8 @@ class TodayController extends Controller
 {
     public function index(Today $today)
     {
-        dispatch(new CacheToday())->onQueue('default');
+        $job = new CacheToday();
+        $today->hasData() ? dispatch($job) : dispatch_sync($job);
 
         return Inertia::render('Today', $today->toArray());
     }
