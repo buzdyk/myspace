@@ -19,7 +19,7 @@ npm run build
 
 There are 3 common options to self-host:
 1. `php artisan serve` 
-2. `valet up`
-3. `sails up`
+2. [Laravel Valet](https://laravel.com/docs/11.x/valet)
+3. [Laravel Sail](https://laravel.com/docs/11.x/sail)
 
-To make /today run smoother use queue driver other than sync.
+To make /today page run smoother use queue connection other than sync.
