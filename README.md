@@ -1,10 +1,11 @@
 # myspace
 
-- Unifies time data it gathers from different providers.
-- Helps with invoicing and day-to-day time tracking.
+Features:
+- Unifies time data gathered from connected providers
+- Transparent day-to-day time tracking
+- Serves as a source of truth for monthly invoicing
 
 <img src="readme.gif" alt="drawing" style="width:800px;"/>
-
 
 Currently available time providers are:
 - clockify
