@@ -30,25 +30,25 @@ const saveSettings = async () => {
                 <label for="hourlyRate" class="block">Hourly Rate</label>
                 <div class="flex-grow border-b-dots mx-3 mb-1"></div>
                 <input v-model="hourlyRate" type="number" step="0.01" class="block w-12 bg-transparent text-right text-gray-200 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
-                <div class="w-8 ml-4 text-sm mt-2 text-gray-400">usd</div>
+                <div class="w-8 ml-4 text-sm text-gray-400" style="margin-top:7px;">usd</div>
             </div>
 
             <div class="mt-4 flex justify-between">
                 <label for="dailyGoal" class="block">Daily Goal</label>
                 <div class="flex-grow border-b-dots mx-3 mb-1"></div>
                 <input v-model="dailyGoal" type="number" step="0.01" class="block w-12 bg-transparent text-right text-gray-200 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
-                <div class="ml-4 w-8 text-sm mt-2 text-gray-400">hours</div>
+                <div class="ml-4 w-8 text-sm text-gray-400" style="margin-top:7px;">hours</div>
             </div>
 
             <div class="mt-4 flex justify-between">
                 <label for="monthlyGoal" class="block">Monthly Goal</label>
                 <div class="flex-grow border-b-dots mx-3 mb-1"></div>
                 <input  v-model="monthlyGoal" type="number" step="0.01" class="block w-12 bg-transparent text-right focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
-                <div class="w-8 ml-4 text-sm mt-2 text-gray-400">hours</div>
+                <div class="w-8 ml-4 text-sm text-gray-400" style="margin-top:7px;">hours</div>
             </div>
 
-            <div class="flex justify-around">
-                <button type="submit" class="block mt-12 w-1/2 bg-transparent text-gray-600 hover:text-gray-200 font-bold py-2 px-4 rounded border border-gray-600 hover:border hover:border-gray-500">Save</button>
+            <div class="mt-20 flex justify-around">
+                <button type="submit" class="block w-1/2 bg-transparent text-gray-600 hover:text-gray-200 font-bold py-2 px-4 rounded border border-gray-600 hover:border hover:border-gray-500">Save</button>
             </div>
         </form>
     </div>
