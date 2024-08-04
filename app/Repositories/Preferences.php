@@ -12,19 +12,19 @@ class Preferences
         return Setting::where('key', $key->value)->first();
     }
 
-    public function getHourlyRate()
+    public function getHourlyRate(): int|float|null
     {
-        return ($setting = $this->byKey(SettingKey::hourlyRate)) ? (float) $setting->value : 0;
+        return ($setting = $this->byKey(SettingKey::hourlyRate)) ? (float) $setting->value : null;
     }
 
-    public function getMonthlyGoal()
+    public function getMonthlyGoal(): int|float|null
     {
-        return ($setting = $this->byKey(SettingKey::monthlyGoal)) ? (float) $setting->value : 0;
+        return ($setting = $this->byKey(SettingKey::monthlyGoal)) ? (float) $setting->value : null;
     }
 
-    public function getDailyGoal()
+    public function getDailyGoal(): int|float|null
     {
-        return ($setting = $this->byKey(SettingKey::dailyGoal)) ? (float) $setting->value : 0;
+        return ($setting = $this->byKey(SettingKey::dailyGoal)) ? (float) $setting->value : null;
     }
 
     public function setHourlyRate(int|float $value)
@@ -43,5 +43,10 @@ class Preferences
     {
         $key = SettingKey::dailyGoal->value;
         return Setting::updateOrCreate(['key' => $key], ['value' => $value]);
+    }
+
+    public function valid()
+    {
+        return $this->getHourlyRate() && $this->getMonthlyGoal() && $this->getDailyGoal();
     }
 }

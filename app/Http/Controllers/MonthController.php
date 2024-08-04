@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\Preferences;
 use App\Repositories\Trackers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -10,8 +11,12 @@ use Inertia\Inertia;
 
 class MonthController extends Controller
 {
-    public function index(Request $request, Trackers $trackers)
+    public function index(Request $request, Trackers $trackers, Preferences $preferences)
     {
+        if ($preferences->valid() === false) {
+            return redirect('/settings');
+        }
+
         $dayOfMonth = $this->getDayOfMonth($request);
 
         $dailyHours = $trackers->getDailyHours($dayOfMonth);
