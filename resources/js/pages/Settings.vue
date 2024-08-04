@@ -1,6 +1,7 @@
 <script setup>
-import { router } from '@inertiajs/vue3'
+import axios from 'axios'
 import Navigation from './../components/Navigation.vue'
+import { ref } from 'vue'
 
 const props = defineProps({
     hourlyRate: { type: Number, required: true },
@@ -12,18 +13,23 @@ let hourlyRate = props.hourlyRate,
     dailyGoal = props.dailyGoal,
     monthlyGoal = props.monthlyGoal
 
+const message = ref()
+
 const saveSettings = async () => {
-    try {
-        await router.post('/api/settings', { hourlyRate, dailyGoal, monthlyGoal })
-        alert('Settings saved successfully!')
-    } catch (error) {
-        alert('Failed to save settings.')
-    }
+    axios.post(`/settings`, { hourlyRate, dailyGoal, monthlyGoal })
+        .then(() => message.value = 'settings updated')
+        .catch(() => message.value = 'validation error happened')
+}
+
+const resetMessage = () => {
+    message.value = ''
 }
 </script>
 
 <template>
 <div class="h-screen flex items-center justify-center font-mono">
+    <Navigation active="settings" />
+
     <div class="w-1/2 text-xl selection:bg-red-700 selection:text-white">
         <form @submit.prevent="saveSettings" >
             <div class="flex justify-between group">
@@ -49,11 +55,18 @@ const saveSettings = async () => {
 
             <div class="mt-20 flex justify-around">
                 <button type="submit" class="block w-1/2 bg-transparent text-gray-600 hover:text-gray-200 font-bold py-2 px-4 rounded border border-gray-600 hover:border hover:border-gray-500">Save</button>
+
+            </div>
+
+            <div v-if="message" class="mt-6 text-center text-sm text-gray-400">
+                {{ message }}
+                <span
+                    @click="resetMessage"
+                    class="px-2 py-1 font-mono text-gray-400 hover:text-gray-200 cursor-pointer"
+                >X</span>
             </div>
         </form>
     </div>
-
-    <Navigation active="settings" />
 </div>
 </template>
 

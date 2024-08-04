@@ -11,3 +11,4 @@ Route::get('/{year}/{month}', [\App\Http\Controllers\MonthController::class, 'in
 Route::get('/month', [\App\Http\Controllers\MonthController::class, 'redirect']);
 Route::get('/settings', [\App\Http\Controllers\SettingsController::class, 'index']);
 
+Route::post('/settings', [\App\Http\Controllers\SettingsController::class, 'store']);

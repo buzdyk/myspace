@@ -30,18 +30,18 @@ class Preferences
     public function setHourlyRate(int|float $value)
     {
         $key = SettingKey::hourlyRate->value;
-        return Setting::createOrUpdate(['key' => $key], ['kee'=> $key, $value]);
+        return Setting::updateOrCreate(['key' => $key], ['value' => $value]);
     }
 
     public function setMonthlyGoal(int|float $value)
     {
         $key = SettingKey::monthlyGoal->value;
-        return Setting::createOrUpdate(['key' => $key], ['kee'=> $key, $value]);
+        return Setting::updateOrCreate(['key' => $key], ['value' => $value]);
     }
 
     public function setDailyGoal(int|float $value)
     {
         $key = SettingKey::dailyGoal->value;
-        return Setting::createOrUpdate(['key' => $key], ['kee'=> $key, $value]);
+        return Setting::updateOrCreate(['key' => $key], ['value' => $value]);
     }
 }
