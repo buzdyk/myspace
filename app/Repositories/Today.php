@@ -55,7 +55,6 @@ class Today
     public function pace()
     {
         list($remaining, ) = $this->getWeekdaysMeta();
-
         $expectedHours = $remaining * $this->preferences->getDailyGoal();
         $remainingHours = $this->preferences->getMonthlyGoal() - $this->monthHours();
 
