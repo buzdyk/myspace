@@ -1,11 +1,15 @@
 # myspace
 
-Shows time tracked with enabled sources (app/Services/Api/*).
-Supports daily and monthly goals (see .env).
+- Unifies time data it gathers from different providers.
+- Helps with invoicing and day-to-day time tracking.
 
-![goals page](./readme.png)
-![month review page](./readme2.png)
+<img src="readme.gif" alt="drawing" style="width:800px;"/>
 
+
+Currently available time providers are:
+- clockify
+- everhour
+- mayven
 
 ## Setup
 

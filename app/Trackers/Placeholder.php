@@ -47,7 +47,7 @@ class Placeholder implements TimeTracker
     public function getMonthIntervals(Carbon $dayOfMonth): ProjectTimes
     {
         $som = (new Carbon())->startOfMonth();
-        $eom = (new Carbon());
+        $eom = (new Carbon())->endOfMonth()->subDays(11);
 
         $pt = new ProjectTimes();
 
