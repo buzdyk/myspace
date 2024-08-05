@@ -29,8 +29,8 @@ const resetMessage = () => {
 <template>
 <div class="h-screen flex items-center justify-center font-mono">
     <Navigation active="settings" />
+    <div class="relative w-1/2 text-xl selection:bg-red-700 selection:text-white">
 
-    <div class="w-1/2 text-xl selection:bg-red-700 selection:text-white">
         <form @submit.prevent="saveSettings" >
             <div class="flex justify-between group">
                 <label for="hourlyRate" class="block">Hourly Rate</label>

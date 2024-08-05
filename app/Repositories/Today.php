@@ -50,7 +50,7 @@ class Today
 
     public function monthPercent()
     {
-        return round(($this->monthHours() / $this->preferences->getMonthlyGoal()) * 100, 2);
+        return round(($this->monthHours() / $this->preferences->getMonthlyGoal()) * 100, 1);
     }
 
     public function pace()

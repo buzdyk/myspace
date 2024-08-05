@@ -32,33 +32,39 @@ setTimeout(() => router.visit(window.location.pathname, {
 <template>
 <div class="h-screen flex items-center justify-center font-mono">
     <div class="text-2xl selection:bg-red-700 selection:text-white">
-        <div class="flex justify-between">
-            <div class="relative ml-8 w-32 text-gray-600">
-                Today
-                <div v-if="props.runningHours" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -45px; top: 12px;"></div>
-                <div v-if="props.runningHours"
-                     class="absolute text-sm px-4 py-2 font-bold text-gray-700 hover:text-gray-200 cursor-none"
-                     style="left: -135px; top: 0px;">{{ hoursToString(props.runningHours) }}</div>
-            </div>
-            <div class="ml-8 w-32 text-gray-600">Month</div>
-            <div class="ml-8 w-32 text-gray-600">Pace</div>
-        </div>
+        <div class="flex justify-around">
+            <div class="w-24">
+                <div class="relative text-gray-600">
+                    Today
+                    <div v-if="props.runningHours" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -45px; top: 12px;"></div>
+                    <div v-if="props.runningHours"
+                         class="absolute text-sm px-4 py-2 font-bold text-gray-700 hover:text-gray-200 cursor-none"
+                         style="left: -135px; top: 0px;">{{ hoursToString(props.runningHours) }}</div>
+                </div>
 
-        <div class="mt-4 flex justify-between">
-            <div class="ml-8 w-32 group">
-                <span class="group-hover:hidden">{{ props.todayPercent }}%</span>
-                <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                {{ hoursToString(props.todayHours) }}
-            </span>
+                <div class="mt-4 group">
+                    <span class="group-hover:hidden">{{ props.todayPercent }}%</span>
+                    <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
+                        {{ hoursToString(props.todayHours) }}
+                    </span>
+                </div>
             </div>
-            <div class="ml-8 w-32 group">
-                <span class="group-hover:hidden">{{ props.monthPercent }}%</span>
-                <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                {{ hoursToString(props.monthHours) }}
-            </span>
+
+            <div class="ml-12 mr-20 w-24 text-center">
+                <div class="text-gray-600">Month</div>
+                <div class="mt-4 group">
+                    <span class="group-hover:hidden">{{ props.monthPercent }}%</span>
+                    <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
+                        {{ hoursToString(props.monthHours) }}
+                    </span>
+                </div>
             </div>
-            <div class="w-32 ml-8" :class="paceClass">
-                {{ hoursToString(Math.abs(props.pace)) }}
+
+            <div class="w-24">
+                <div class="text-gray-600">Pace</div>
+                <div class="mt-4" :class="paceClass">
+                    {{ hoursToString(Math.abs(props.pace)) }}
+                </div>
             </div>
         </div>
 
@@ -67,6 +73,7 @@ setTimeout(() => router.visit(window.location.pathname, {
 <!--                <div style="width: {{ $passed }}%; height: 3px;" class="bg-gray-600">&nbsp;</div>-->
 <!--                <div style="width: {{ 100 - $passed }}%;  height: 3px;" class="bg-gray-700">&nbsp;</div>-->
 <!--            </div>-->
+
     </div>
 
     <Navigation active="today" />
