@@ -24,16 +24,16 @@ const paceClass = computed(() => {
     return ''
 })
 
-setTimeout(() => router.visit(window.location.pathname, {
-    except: ['users'],
-}), 15000)
+// setTimeout(() => router.visit(window.location.pathname, {
+//     except: ['users'],
+// }), 15000)
 </script>
 
 <template>
 <div class="h-screen flex items-center justify-center font-mono">
-    <div class="text-2xl selection:bg-red-700 selection:text-white">
-        <div class="flex justify-around">
-            <div class="w-24">
+    <div class="flex justify-around text-2xl selection:bg-red-700 selection:text-white">
+        <div class="flex justify-between w-96">
+            <div>
                 <div class="relative text-gray-600">
                     Today
                     <div v-if="props.runningHours" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -45px; top: 12px;"></div>
@@ -50,7 +50,7 @@ setTimeout(() => router.visit(window.location.pathname, {
                 </div>
             </div>
 
-            <div class="ml-12 mr-20 w-24 text-center">
+            <div>
                 <div class="text-gray-600">Month</div>
                 <div class="mt-4 group">
                     <span class="group-hover:hidden">{{ props.monthPercent }}%</span>
@@ -60,7 +60,7 @@ setTimeout(() => router.visit(window.location.pathname, {
                 </div>
             </div>
 
-            <div class="w-24">
+            <div>
                 <div class="text-gray-600">Pace</div>
                 <div class="mt-4" :class="paceClass">
                     {{ hoursToString(Math.abs(props.pace)) }}
