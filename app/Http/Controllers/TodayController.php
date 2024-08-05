@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Jobs\CacheToday;
 use App\Repositories\Preferences;
 use App\Repositories\Today;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Queue;
 use Inertia\Controller;
 use Inertia\Inertia;
 
@@ -17,7 +19,15 @@ class TodayController extends Controller
         }
 
         $job = new CacheToday();
-        $today->hasData() ? dispatch($job) : dispatch_sync($job);
+        $noPendingJob = Queue::size('default') === 0;
+
+        if ($today->hasData() === false) {
+            dispatch_sync($job);
+        }
+
+        if ($noPendingJob) {
+            dispatch($job);
+        }
 
         return Inertia::render('Today', $today->toArray());
     }
