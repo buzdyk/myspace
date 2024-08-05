@@ -12,6 +12,11 @@ const props = defineProps({
 // todo refactor to helper
 const hoursToString = (number) =>
     Math.floor(number) + ':' + Math.round((number - Math.floor(number)) * 60).toString().padStart(2, '0')
+
+const formatMoney = number => {
+    const options = { maximumSignificantDigits: 0, style: 'currency', currency: 'USD' }
+    return `$` + Intl.NumberFormat('en-US', ).format(number)
+}
 </script>
 
 <template>
@@ -33,7 +38,7 @@ const hoursToString = (number) =>
         </div>
         <div class="text-right">{{ hoursToString(project.hours) }}</div>
         <div class="w-32 text-right">
-            ${{ (project.hours * hourlyRate).toFixed(0) }}
+            {{ formatMoney((project.hours * hourlyRate).toFixed(0)) }}
         </div>
     </div>
 
@@ -41,7 +46,7 @@ const hoursToString = (number) =>
         <div class="w-3/4">&nbsp;</div>
         <div class="text-right">{{ hoursToString(monthHours) }}</div>
         <div class="w-32 text-right">
-            ${{ (monthHours * hourlyRate).toFixed(0) }}
+            {{ formatMoney((monthHours * hourlyRate).toFixed(0)) }}
         </div>
     </div>
 </div>
