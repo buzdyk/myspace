@@ -9,6 +9,8 @@ const props = defineProps({
     monthHours: { type: Number, required: true },
     dailyHours: { type: Array, required: true },
     dayOfMonth: { type: String, required: true },
+    weekdays: { type: Number, required: true },
+    weekends: { type: Number, required: true },
     prevMonthLink: { type: String, required: true },
     nextMonthLink: { type: String, required: true },
 })
@@ -25,6 +27,9 @@ const props = defineProps({
 
             <a :href="props.prevMonthLink" class="ml-4 text-gray-600 hover:text-gray-100 hover:border-b cursor-pointer">&lt;</a>
             <a :href="props.nextMonthLink" class="ml-4 text-gray-600 hover:text-gray-100 hover:border-b cursor-pointer">&gt;</a>
+        </div>
+        <div class="mt-6 text-sm inline-block text-gray-600 hover:text-gray-200">
+            {{ props.weekdays }} weekdays <br> {{ props.weekends }} weekends
         </div>
     </div>
 

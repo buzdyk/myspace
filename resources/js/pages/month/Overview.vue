@@ -17,30 +17,43 @@ const hoursToString = (number) =>
 <template>
 <div>
     <div class="flex justify-between mb-4 text-gray-600">
-        <div class="w-2/4">
+        <div class="w-3/4">
             <span>Project</span>
         </div>
-        <div class="w-1/4 text-left">
+        <div class="text-right">
             <span>Hours</span>
         </div>
-        <div class="w-1/4">Earned</div>
+        <div class="w-32 text-right">Earned</div>
     </div>
 
     <div v-for="project in projects" class="flex justify-between">
-        <div class="w-2/4">{{ project.projectTitle }}</div>
-        <div class="w-1/4 text-left">{{ hoursToString(project.hours) }}</div>
-        <div class="w-1/4 text-left">
+        <div class="w-3/4 flex justify-between">
+            {{ project.projectTitle }}
+            <div class="flex-grow border-b-dots mx-3 mb-1"></div>
+        </div>
+        <div class="text-right">{{ hoursToString(project.hours) }}</div>
+        <div class="w-32 text-right">
             ${{ (project.hours * hourlyRate).toFixed(0) }}
         </div>
     </div>
 
     <div v-if="projects.length > 0" class="flex justify-between mt-8">
-        <div class="w-2/4">&nbsp;</div>
-        <div class="w-1/4 text-left">{{ hoursToString(monthHours) }}</div>
-        <div class="w-1/4 text-left">
+        <div class="w-3/4">&nbsp;</div>
+        <div class="text-right">{{ hoursToString(monthHours) }}</div>
+        <div class="w-32 text-right">
             ${{ (monthHours * hourlyRate).toFixed(0) }}
         </div>
     </div>
 </div>
 </template>
+
+<style>
+.border-b-dots {
+    background-image: linear-gradient(to right, #757575 23%, rgba(255,255,255,0) 0%);
+    background-position: bottom;
+    background-size: 7px 1px;
+    background-repeat: repeat-x;
+}
+</style>
+
 

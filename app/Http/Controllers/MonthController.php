@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\MonthMeta;
 use App\Repositories\Preferences;
 use App\Repositories\Trackers;
 use Carbon\Carbon;
@@ -11,7 +12,7 @@ use Inertia\Inertia;
 
 class MonthController extends Controller
 {
-    public function index(Request $request, Trackers $trackers, Preferences $preferences)
+    public function index(Request $request, Trackers $trackers, Preferences $preferences, MonthMeta $monthMeta)
     {
         if ($preferences->valid() === false) {
             return redirect('/settings');
@@ -30,12 +31,15 @@ class MonthController extends Controller
         }
 
         $projects = $trackers->getMonthlyTimeByProject($dayOfMonth);
+        list (, $weekdays, $weekends) = $monthMeta->getWeekdaysMeta($dayOfMonth);
 
         return Inertia::render('Month', [
             'projects' => $projects->toArray(),
             'monthHours' => $projects->getHours(),
             'dailyHours' => array_values($dailyHours),
             'dayOfMonth' => $dayOfMonth->format('F, Y'),
+            'weekdays' => $weekdays,
+            'weekends' => $weekends,
             'prevMonthLink' => '/' . strtolower($dayOfMonth->copy()->subMonth()->format('Y/F')),
             'nextMonthLink' => '/' . strtolower($dayOfMonth->copy()->addMonth()->format('Y/F')),
         ]);

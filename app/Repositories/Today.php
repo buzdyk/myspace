@@ -8,6 +8,7 @@ class Today
         protected Trackers $trackers,
         protected TodayCache $cache,
         protected Preferences $preferences,
+        protected MonthMeta $monthMeta
     ) {}
 
     public function hasData(): bool
@@ -54,28 +55,11 @@ class Today
 
     public function pace()
     {
-        list($remaining, ) = $this->getWeekdaysMeta();
+        list($remaining, ) = $this->monthMeta->getWeekdaysMeta(now());
+
         $expectedHours = $remaining * $this->preferences->getDailyGoal();
         $remainingHours = $this->preferences->getMonthlyGoal() - $this->monthHours();
 
         return round($expectedHours - $remainingHours, 1);
-    }
-
-    private function getWeekdaysMeta(): array
-    {
-        $today = now();
-        $month = $today->month;
-
-        $total = $remaining = 0;
-
-        $som = $today->copy()->startOfMonth();
-        while ($som->month === $month) {
-            $som->isWeekday() && $total++;
-            $som->isWeekday() && $som->isAfter($today) && $remaining++;
-
-            $som->addDay();
-        }
-
-        return [$remaining, $total];
     }
 }
