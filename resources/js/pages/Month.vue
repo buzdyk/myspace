@@ -33,10 +33,6 @@ const props = defineProps({
         </div>
     </div>
 
-    <div v-if="monthHours" class="absolute h-screen flex items-center pr-36 text-xs text-gray-600 hover:text-white" style="left:48px">
-        <DailyHours :daily-hours="props.dailyHours" />
-    </div>
-
     <Navigation active="month" />
 </div>
 </template>

@@ -11,13 +11,12 @@ const props = defineProps({
 </script>
 
 <template>
-<div class="w-full absolute text-xs" style="bottom: 30px; left: 0;">
-    <div class="flex justify-around">
-        <div class="w-64 group text-center flex justify-between">
-            <div v-for="(label, path) in pages" class="w-24">
-                <a v-if="path !== props.active" :href="`/${path}`" class="text-gray-600 hover:text-gray-100">{{ label }}</a>
-                <span v-else class="inline-block text-gray-400">{{ label }}</span>
-            </div>
+<div class="h-full absolute" style="left: 30px;top: 50%;">
+    <div class="w-64 group">
+        <slot></slot>
+        <div v-for="(label, path) in pages" class="text-xs">
+            <a v-if="path !== props.active" :href="`/${path}`" class="text-gray-600 hover:text-gray-100">{{ label }}</a>
+            <span v-else class="inline-block text-gray-400">{{ label }}</span>
         </div>
     </div>
 </div>

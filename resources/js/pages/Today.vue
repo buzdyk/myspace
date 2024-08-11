@@ -30,43 +30,50 @@ const paceClass = computed(() => {
 </script>
 
 <template>
-<div class="h-screen flex items-center justify-center font-mono">
-    <div class="flex justify-around text-2xl selection:bg-red-700 selection:text-white">
-        <div class="flex justify-between w-96">
-            <div>
-                <div class="relative text-gray-600">
-                    Today
-                    <div v-if="props.runningHours" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -45px; top: 12px;"></div>
-                    <div v-if="props.runningHours"
-                         class="absolute text-sm px-4 py-2 font-bold text-gray-700 hover:text-gray-200 cursor-none"
-                         style="left: -135px; top: 0px;">{{ hoursToString(props.runningHours) }}</div>
-                </div>
+<div class="h-screen flex justify-between items-center font-mono text-2xl selection:bg-red-700 selection:text-white">
+    <div>
+        <a href="#" class="block ml-12 px-12 py-4 text-gray-600 hover:text-gray-200">&lt;</a>
+    </div>
 
-                <div class="mt-4 group">
-                    <span class="group-hover:hidden">{{ props.todayPercent }}%</span>
-                    <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                        {{ hoursToString(props.todayHours) }}
-                    </span>
-                </div>
+    <div class="flex justify-between w-80">
+        <div>
+            <div class="relative text-gray-600">
+                Today
+                <div v-if="props.runningHours" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -45px; top: 12px;"></div>
+                <div v-if="props.runningHours"
+                     class="absolute text-sm px-4 py-2 font-bold text-gray-700 hover:text-gray-200 cursor-none"
+                     style="left: -135px; top: 0px;">{{ hoursToString(props.runningHours) }}</div>
             </div>
 
-            <div>
-                <div class="text-gray-600">Month</div>
-                <div class="mt-4 group">
-                    <span class="group-hover:hidden">{{ props.monthPercent }}%</span>
-                    <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                        {{ hoursToString(props.monthHours) }}
-                    </span>
-                </div>
-            </div>
-
-            <div>
-                <div class="text-gray-600">Pace</div>
-                <div class="mt-4" :class="paceClass">
-                    {{ hoursToString(Math.abs(props.pace)) }}
-                </div>
+            <div class="mt-4 group">
+                <span class="group-hover:hidden">{{ props.todayPercent }}%</span>
+                <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
+                    {{ hoursToString(props.todayHours) }}
+                </span>
             </div>
         </div>
+
+        <div>
+            <div class="text-gray-600">Month</div>
+            <div class="mt-4 group">
+                <span class="group-hover:hidden">{{ props.monthPercent }}%</span>
+                <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
+                    {{ hoursToString(props.monthHours) }}
+                </span>
+            </div>
+        </div>
+
+        <div>
+            <div class="text-gray-600">Pace</div>
+            <div class="mt-4" :class="paceClass">
+                {{ hoursToString(Math.abs(props.pace)) }}
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <a href="#" class="block px-12 py-4 mr-12 text-gray-600 hover:text-gray-200">&gt;</a>
+    </div>
 
 <!--            progress bar-->
 <!--            <div class="mt-8 flex justify-start">&#45;&#45;}}-->
@@ -74,7 +81,6 @@ const paceClass = computed(() => {
 <!--                <div style="width: {{ 100 - $passed }}%;  height: 3px;" class="bg-gray-700">&nbsp;</div>-->
 <!--            </div>-->
 
-    </div>
 
     <Navigation active="today" />
 </div>
