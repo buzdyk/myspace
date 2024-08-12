@@ -48,6 +48,6 @@ class MonthController extends Controller
     {
         $date = new Carbon();
 
-        return redirect()->to($date->year . '/' . strtolower($date->monthName));
+        return redirect()->to($date->year . '/' . strtolower($date->monthName) . '/calendar');
     }
 }

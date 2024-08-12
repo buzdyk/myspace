@@ -25,34 +25,29 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
 <template>
 <div class="h-screen w-full flex justify-center items-center font-mono text-2xl selection:bg-red-700 selection:text-white">
     <div>
-        <div class="grid grid-cols-7 gap-y-4 gap-x-3 text-center">
+        <div class="grid grid-cols-7 gap-y-5 gap-x-3 text-center">
             <div v-for="(day, index) in daysOfWeek" :key="index" class="text-left font-bold text-gray-400 text-sm">
                 {{ day }}
             </div>
 
-            <div class="col-span-7 my-2 border-b border-b-gray-700"></div>
+            <div class="col-span-7 border-b border-b-gray-700"></div>
 
             <div v-for="day in props.days" class="group relative">
                 <div v-if="day" class="text-gray-500 text-left text-xs">{{ day.date }}</div>
 
-                <div v-if="day.hours" class="flex w-16 cursor-none justify-start mt-1">
-                    <div class="text-xs">
-                        <div class="group-hover:hidden">{{ hoursToString(day.hours) }}</div>
-                        <div class="group-hover:block hidden">{{ formatMoney(day.hours * hourlyRate) }}</div>
-                    </div>
+                <div v-if="day.hours" class="flex w-16 cursor-none justify-start mt-2 text-sm">
+                    <div class="group-hover:hidden">{{ hoursToString(day.hours) }}</div>
+                    <div class="group-hover:block hidden">{{ formatMoney(day.hours * hourlyRate) }}</div>
                 </div>
+
+                <div v-if="!day || !day.hours">&nbsp;</div>
             </div>
         </div>
 
-        <div class="mt-16 flex justify-between items-start">
-            <Navigation active="month">
-                <div class="mb-1 text-xs flex justify-start">
-                    <a :href="`${props.links.thisMonth}/calendar`" class="text-xs block text-gray-600 hover:text-gray-100">Calendar</a>
-                    <span class="block ml-2 text-gray-400">Projects</span>
-                </div>
-            </Navigation>
-
-            <div class="text-sm flex justify-start">
+    </div>
+    <div class="absolute w-full" style="bottom: 32px;">
+        <div class="mb-4 text-sm flex justify-around">
+            <div class="flex justify-around">
                 <span class="block text-gray-400">July 2024</span>
 
                 <a :href="`${props.links.prevMonth}/calendar`" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
@@ -60,6 +55,9 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
             </div>
         </div>
 
+        <div class="flex justify-around items-center">
+            <Navigation active="month" />
+        </div>
     </div>
 </div>
 </template>

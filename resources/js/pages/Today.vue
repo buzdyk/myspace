@@ -30,58 +30,65 @@ const paceClass = computed(() => {
 </script>
 
 <template>
-<div class="h-screen flex justify-between items-center font-mono text-2xl selection:bg-red-700 selection:text-white">
+<div class="h-screen flex justify-around items-center font-mono text-xl selection:bg-red-700 selection:text-white">
     <div>
-        <a href="#" class="block ml-12 px-12 py-4 text-gray-600 hover:text-gray-200">&lt;</a>
-    </div>
+        <div class="flex justify-between w-96">
+            <div>
+                <div class="relative text-gray-600">
+                    Goal
+                    <div v-if="props.runningHours" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -45px; top: 12px;"></div>
+                    <div v-if="props.runningHours"
+                         class="absolute text-sm px-4 py-2 font-bold text-gray-700 hover:text-gray-200 cursor-none"
+                         style="left: -135px; top: 0px;">{{ hoursToString(props.runningHours) }}</div>
+                </div>
 
-    <div class="flex justify-between w-80">
-        <div>
-            <div class="relative text-gray-600">
-                Today
-                <div v-if="props.runningHours" class="absolute bg-red-600 rounded-full" style="width: 10px; height: 10px; left: -45px; top: 12px;"></div>
-                <div v-if="props.runningHours"
-                     class="absolute text-sm px-4 py-2 font-bold text-gray-700 hover:text-gray-200 cursor-none"
-                     style="left: -135px; top: 0px;">{{ hoursToString(props.runningHours) }}</div>
+                <div class="mt-4 group">
+                    <span class="group-hover:hidden">{{ props.todayPercent }}%</span>
+                    <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
+                        {{ hoursToString(props.todayHours) }}
+                    </span>
+                </div>
             </div>
 
-            <div class="mt-4 group">
-                <span class="group-hover:hidden">{{ props.todayPercent }}%</span>
-                <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                    {{ hoursToString(props.todayHours) }}
-                </span>
+            <div>
+                <div class="text-gray-600">Month</div>
+                <div class="mt-4 group">
+                    <span class="group-hover:hidden">{{ props.monthPercent }}%</span>
+                    <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
+                        {{ hoursToString(props.monthHours) }}
+                    </span>
+                </div>
             </div>
-        </div>
 
-        <div>
-            <div class="text-gray-600">Month</div>
-            <div class="mt-4 group">
-                <span class="group-hover:hidden">{{ props.monthPercent }}%</span>
-                <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
-                    {{ hoursToString(props.monthHours) }}
-                </span>
-            </div>
-        </div>
-
-        <div>
-            <div class="text-gray-600">Pace</div>
-            <div class="mt-4" :class="paceClass">
-                {{ hoursToString(Math.abs(props.pace)) }}
+            <div>
+                <div class="text-gray-600">Pace</div>
+                <div class="mt-4" :class="paceClass">
+                    {{ hoursToString(Math.abs(props.pace)) }}
+                </div>
             </div>
         </div>
+
+    <!--            progress bar-->
+    <!--            <div class="mt-8 flex justify-start">&#45;&#45;}}-->
+    <!--                <div style="width: {{ $passed }}%; height: 3px;" class="bg-gray-600">&nbsp;</div>-->
+    <!--                <div style="width: {{ 100 - $passed }}%;  height: 3px;" class="bg-gray-700">&nbsp;</div>-->
+    <!--            </div>-->
+
+
+        <div class="absolute w-96" style="bottom: 32px;">
+            <div class="mt-16 text-sm flex justify-around">
+                <div class="mb-4 flex justify-between">
+                    <span class="block text-gray-500">July, 28th</span>
+
+                    <a :href="`/calendar`" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
+                    <a :href="`/calendar`" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
+                </div>
+            </div>
+
+            <div class="flex justify-around items-center">
+                <Navigation active="today" />
+            </div>
+        </div>
     </div>
-
-    <div>
-        <a href="#" class="block px-12 py-4 mr-12 text-gray-600 hover:text-gray-200">&gt;</a>
-    </div>
-
-<!--            progress bar-->
-<!--            <div class="mt-8 flex justify-start">&#45;&#45;}}-->
-<!--                <div style="width: {{ $passed }}%; height: 3px;" class="bg-gray-600">&nbsp;</div>-->
-<!--                <div style="width: {{ 100 - $passed }}%;  height: 3px;" class="bg-gray-700">&nbsp;</div>-->
-<!--            </div>-->
-
-
-    <Navigation active="today" />
 </div>
 </template>
