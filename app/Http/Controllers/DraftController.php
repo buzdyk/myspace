@@ -25,8 +25,7 @@ class DraftController
 
         return Inertia::render('Draft', [
             'days' => array_values($days),
-            'prevMonthLink' => $request->prevMonthLink(),
-            'nextMonthLink' => $request->nextMonthLink(),
+            'links' => $request->getLinks(),
         ]);
     }
 }

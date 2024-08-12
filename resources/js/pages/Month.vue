@@ -11,28 +11,38 @@ const props = defineProps({
     dayOfMonth: { type: String, required: true },
     weekdays: { type: Number, required: true },
     weekends: { type: Number, required: true },
-    prevMonthLink: { type: String, required: true },
-    nextMonthLink: { type: String, required: true },
+    links: { type: Array, required: true },
 })
 </script>
 
 <template>
-<div class="h-screen flex items-center justify-center font-mono">
-    <div class="w-1/2 text-2xl selection:bg-red-700 selection:text-white">
-        <Overview v-if="monthHours" :projects="props.projects" :monthHours="props.monthHours" />
-        <EmptyPlaceholder v-else />
+<div class=" font-mono">
+    <div class="h-screen flex justify-center items-center">
+        <div class=" w-1/2 text-xl selection:bg-red-700 selection:text-white">
+            <div>
+                <Overview v-if="monthHours" :projects="props.projects" :monthHours="props.monthHours" />
+                <EmptyPlaceholder v-else />
 
-        <div class="mt-16">
-            {{ props.dayOfMonth }}
+                <Navigation active="month">
+                    <div class="text-xs">
+                        <div class="flex justify-start">
+                            <a :href="`${props.links.thisMonth}/calendar`" class="text-xs block text-gray-600 hover:text-gray-100">Calendar</a>
+                            <span class="block ml-2 text-gray-400">Projects</span>
+                        </div>
+                        <div class="mt-1 flex justify-start">
+                            <span class="block text-gray-400">July 2024</span>
+                            <a :href="`${props.links.prevMonth}/projects`" class="ml-1 px-1 text-gray-600 hover:text-gray-200">&lt;</a>
+                            <a :href="`${props.links.nextMonth}/projects`" class="px-1 text-gray-600 hover:text-gray-200">&gt;</a>
+                        </div>
+                    </div>
+                </Navigation>
+            </div>
 
-            <a :href="props.prevMonthLink" class="ml-4 text-gray-600 hover:text-gray-100 hover:border-b cursor-pointer">&lt;</a>
-            <a :href="props.nextMonthLink" class="ml-4 text-gray-600 hover:text-gray-100 hover:border-b cursor-pointer">&gt;</a>
-        </div>
-        <div class="mt-6 text-sm inline-block text-gray-600 hover:text-gray-200">
-            {{ props.weekdays }} weekdays <br> {{ props.weekends }} weekends
+    <!--        <div class="mt-6 text-sm inline-block text-gray-600 hover:text-gray-200">-->
+    <!--            {{ props.weekdays }} weekdays <br> {{ props.weekends }} weekends-->
+    <!--        </div>-->
         </div>
     </div>
 
-    <Navigation active="month" />
 </div>
 </template>

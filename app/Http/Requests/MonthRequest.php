@@ -31,9 +31,19 @@ class MonthRequest extends FormRequest
     }
 
 
+    public function getLinks()
+    {
+        $day = $this->dayOfMonth();
+        return [
+            'thisMonth' => '/' . strtolower($day->copy()->format('Y/F')),
+            'prevMonth' => '/' . strtolower($day->copy()->subMonth()->format('Y/F')),
+            'nextMonth' => '/' . strtolower($day->copy()->addMonth()->format('Y/F')),
+        ];
+    }
+
     public function prevMonthLink()
     {
-        return '/' . strtolower($this->dayOfMonth()->subMonth()->format('Y/F'));
+        return ;
     }
 
 
