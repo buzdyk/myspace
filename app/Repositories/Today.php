@@ -13,7 +13,14 @@ class Today
         protected TodayCache $cache,
         protected Preferences $preferences,
         protected MonthMeta $monthMeta
-    ) {}
+    ) {
+        $this->day = now();
+    }
+
+    public function setDay(Carbon $day): static
+    {
+        return tap($this, fn () => $this->day = $day);
+    }
 
     public function hasData(): bool
     {
@@ -59,7 +66,7 @@ class Today
 
     public function pace()
     {
-        list($remaining, ) = $this->monthMeta->getWeekdaysMeta(now());
+        list($remaining, ) = $this->monthMeta->getWeekdaysMeta($this->day);
 
         $expectedHours = $remaining * $this->preferences->getDailyGoal();
         $remainingHours = $this->preferences->getMonthlyGoal() - $this->monthHours();

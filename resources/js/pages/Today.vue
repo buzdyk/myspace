@@ -14,6 +14,7 @@ const props = defineProps({
     monthHours: { type: Number, required: true },
     pace: { type: Number, required: true },
     nav: { type: Object, required: true },
+    isToday: { type: Boolean, required: true },
 })
 
 // setTimeout(() => router.visit(window.location.pathname, {
@@ -46,7 +47,7 @@ const props = defineProps({
         </div>
 
         <div class="flex justify-around items-center">
-            <Navigation active="today" />
+            <Navigation :active="isToday ? 'today' : null" />
         </div>
     </div>
 </div>

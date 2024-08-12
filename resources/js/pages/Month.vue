@@ -25,15 +25,15 @@ const props = defineProps({
                     <Navigation active="month">
                         <div class="mb-1 text-xs flex justify-start ">
                             <span class="block text-gray-400">Projects</span>
-                            <a :href="`${props.links.thisMonth}/calendar`" class="ml-2 text-xs block text-gray-600 hover:text-gray-100">Calendar</a>
+                            <a :href="`${props.links.thisLink}/calendar`" class="ml-2 text-xs block text-gray-600 hover:text-gray-100">Calendar</a>
                         </div>
                     </Navigation>
 
                     <div class="text-sm flex justify-start">
                         <span class="block text-gray-400">July 2024</span>
 
-                        <a :href="`${props.links.prevMonth}/projects`" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
-                        <a :href="`${props.links.nextMonth}/projects`" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
+                        <a :href="`${props.links.prevLink}/projects`" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
+                        <a :href="`${props.links.nextLink}/projects`" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
                     </div>
                 </div>
 

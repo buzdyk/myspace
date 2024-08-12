@@ -31,11 +31,12 @@ class TodayController extends Controller
         $this->cacheValues($date, $trackers, $cache);
 
         return Inertia::render('Today', [
-            ...$today->toArray(),
+            ...$today->setDay($date)->toArray(),
             'nav' => [
                 ...$request->getLinks(),
                 'caption' => $date->format('F, jS')
-            ]
+            ],
+            'isToday' => $date->isSameDay(now()),
         ]);
     }
 
@@ -44,12 +45,12 @@ class TodayController extends Controller
         $value = $trackers->runningHours();
         $cache->setRunningHours($value);
 
-        $value = $trackers->hours(now()->startOfDay(), now()->endOfDay());
+        $value = $trackers->hours($date->copy()->startOfDay(), $date->copy()->endOfDay());
         $value += $cache->getRunningHours();
         $cache->setTodayHours($value);
 
-        $som = now()->startOfMonth(); $eom = now()->endOfMonth();
-        $value = $trackers->hours($som, $eom) + $cache->getRunningHours();
+        $som = $date->copy()->startOfMonth(); $eom = $date->copy()->endOfDay();
+        $value = $trackers->hours($som, $eom) + ($date->isSameDay(now()) ? $cache->getRunningHours() : 0);
         $cache->setMonthHours($value);
     }
 }

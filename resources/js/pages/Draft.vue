@@ -33,14 +33,16 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
             <div class="col-span-7 border-b border-b-gray-700"></div>
 
             <div v-for="day in props.days" class="group relative">
-                <div v-if="day" class="text-gray-500 text-left text-xs">{{ day.date }}</div>
+                <div v-if="day" class="text-gray-500 text-left text-xs">
+                    <a :href="day.link">{{ day.date }}</a>
+                </div>
 
-                <div v-if="day.hours" class="flex w-16 cursor-none justify-start mt-2 text-sm">
+                <div v-if="day && day.hours" class="flex w-16 cursor-none justify-start mt-2 text-sm">
                     <div class="group-hover:hidden">{{ hoursToString(day.hours) }}</div>
                     <div class="group-hover:block hidden">{{ formatMoney(day.hours * hourlyRate) }}</div>
                 </div>
 
-                <div v-if="!day || !day.hours">&nbsp;</div>
+                <div v-if="day === null || !day.hours">&nbsp;</div>
             </div>
         </div>
 
@@ -48,10 +50,10 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
     <div class="absolute w-full" style="bottom: 32px;">
         <div class="mb-4 text-sm flex justify-around">
             <div class="flex justify-around">
-                <span class="block text-gray-400">July 2024</span>
+                <span class="block text-gray-400">{{ props.links.caption }}</span>
 
-                <a :href="`${props.links.prevMonth}/calendar`" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
-                <a :href="`${props.links.nextMonth}/calendar`" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
+                <a :href="`${props.links.prevLink}/calendar`" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
+                <a :href="`${props.links.nextLink}/calendar`" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
             </div>
         </div>
 
@@ -61,11 +63,3 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
     </div>
 </div>
 </template>
-
-<style scoped>
-.break {
-    flex-basis: 100%;
-    height: 0;
-}
-</style>
-
