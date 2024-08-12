@@ -2,37 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\CacheToday;
+use App\Http\Requests\MonthRequest;
 use App\Repositories\Preferences;
 use App\Repositories\Today;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Queue;
+use App\Repositories\TodayCache;
+use App\Repositories\Trackers;
+use Carbon\Carbon;
 use Inertia\Controller;
 use Inertia\Inertia;
 
 class TodayController extends Controller
 {
-    public function index(Today $today, Preferences $settings)
+    public function redirect()
+    {
+        $path = now()->format('Y/F/d');
+        $path = strtolower($path);
+
+        return redirect()->to($path);
+    }
+
+    public function index(MonthRequest $request, Trackers $trackers, Preferences $settings, TodayCache $cache, Today $today)
     {
         if ($settings->valid() === false) {
             return redirect('/settings');
         }
 
-        $job = new CacheToday();
-        $noPendingJob = Queue::size('default') === 0;
+        $date = $request->dayOfMonth()->setDay((int) $request->day);
+        $this->cacheValues($date, $trackers, $cache);
 
-        if ($today->hasData() === false) {
-            dispatch_sync($job);
-        }
-
-        if ($noPendingJob) {
-            dispatch($job);
-        }
-
-        return Inertia::render('Today', $today->toArray());
+        return Inertia::render('Today', [
+            ...$today->toArray(),
+            'nav' => [
+                ...$request->getLinks(),
+                'caption' => $date->format('F, jS')
+            ]
+        ]);
     }
 
-//        list ($remaining, $total) = $this->getWeekdaysMeta();
-//        $passed = ($total - $remaining) / $total;
-//        $passed = (int) ($passed * 100);
+    private function cacheValues(Carbon $date, Trackers $trackers, TodayCache $cache)
+    {
+        $value = $trackers->runningHours();
+        $cache->setRunningHours($value);
+
+        $value = $trackers->hours(now()->startOfDay(), now()->endOfDay());
+        $value += $cache->getRunningHours();
+        $cache->setTodayHours($value);
+
+        $som = now()->startOfMonth(); $eom = now()->endOfMonth();
+        $value = $trackers->hours($som, $eom) + $cache->getRunningHours();
+        $cache->setMonthHours($value);
+    }
 }

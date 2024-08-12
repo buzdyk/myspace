@@ -2,8 +2,12 @@
 
 namespace App\Repositories;
 
+use Carbon\Carbon;
+
 class Today
 {
+    private Carbon $day;
+
     public function __construct(
         protected Trackers $trackers,
         protected TodayCache $cache,

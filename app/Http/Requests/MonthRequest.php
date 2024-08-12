@@ -27,29 +27,22 @@ class MonthRequest extends FormRequest
         return (new Carbon())
             ->setMonth($month)
             ->setYear((int) $this->year)
-            ->setDay(1);
+            ->setDay($this->day ? (int) $this->day : 1);
+
     }
 
 
-    public function getLinks()
+    public function getLinks(): array
     {
+        $hasDay = (bool) $this->day;
+        $route = fn (Carbon $day) => '/' . strtolower($day->format($hasDay ? 'Y/F/d' : 'Y/F'));
+
         $day = $this->dayOfMonth();
+
         return [
-            'thisMonth' => '/' . strtolower($day->copy()->format('Y/F')),
-            'prevMonth' => '/' . strtolower($day->copy()->subMonth()->format('Y/F')),
-            'nextMonth' => '/' . strtolower($day->copy()->addMonth()->format('Y/F')),
+            'thisLink' => $route($day),
+            'prevLink' => $route($hasDay ? $day->copy()->subDay() : $day->copy()->subMonth()),
+            'nextLink' => $route($hasDay ? $day->copy()->addDay() : $day->copy()->addMonth()),
         ];
     }
-
-    public function prevMonthLink()
-    {
-        return ;
-    }
-
-
-    public function nextMonthLink()
-    {
-        return '/' . strtolower($this->dayOfMonth()->addMonth()->format('Y/F'));
-    }
-
 }

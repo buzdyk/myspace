@@ -1,8 +1,6 @@
 <script setup>
 import Navigation from './../components/Navigation.vue'
-import { router, usePage } from '@inertiajs/vue3'
-import { computed } from 'vue'
-import { hoursToString } from '../helpers.js'
+import { router } from '@inertiajs/vue3'
 
 import Month from './today/Month.vue'
 import Pace from './today/Pace.vue'
@@ -15,6 +13,7 @@ const props = defineProps({
     todayHours: { type: Number, required: true },
     monthHours: { type: Number, required: true },
     pace: { type: Number, required: true },
+    nav: { type: Object, required: true },
 })
 
 // setTimeout(() => router.visit(window.location.pathname, {
@@ -39,10 +38,10 @@ const props = defineProps({
     <div class="absolute w-96" style="bottom: 32px;">
         <div class="mt-16 text-sm flex justify-around">
             <div class="mb-4 flex justify-between">
-                <span class="block text-gray-500">July, 28th</span>
+                <span class="block text-gray-500">{{ props.nav.caption }}</span>
 
-                <a :href="`/calendar`" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
-                <a :href="`/calendar`" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
+                <a :href="props.nav.prevLink" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
+                <a :href="props.nav.nextLink" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
             </div>
         </div>
 
