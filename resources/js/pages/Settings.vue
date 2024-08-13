@@ -30,7 +30,7 @@ const resetMessage = () => {
 <div class="h-screen flex items-center justify-center font-mono">
     <div class="absolute w-full" style="bottom: 32px;">
         <div class="flex justify-around items-center">
-            <Navigation active="month" />
+            <Navigation active="settings" />
         </div>
     </div>
 
