@@ -45,10 +45,11 @@ setTimeout(() => router.visit(window.location.pathname, {
     <div class="absolute w-96" style="bottom: 32px;">
 
         <div class="mt-4 text-sm flex justify-around">
-            <div class="relative flex justify-between items-center">
-                <a :href="props.nav.monthLink" class="block text-gray-500">
-                    {{ props.nav.month }}, {{ props.nav.day }} {{ props.nav.year }}
-                </a>
+            <div class="relative flex justify-between items-center text-gray-500">
+
+                <a :href="props.nav.monthLink" class="block">
+                    {{ props.nav.month }},&nbsp;
+                </a> {{ props.nav.day }} {{ props.nav.year }}
 
                 <a :href="props.nav.prevLink" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
                 <a :href="props.nav.nextLink" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>

@@ -24,8 +24,13 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
 
 <template>
 <div class="h-screen w-full flex justify-center items-center font-mono text-2xl selection:bg-red-700 selection:text-white">
-    <div>
-        <div class="grid grid-cols-7 gap-y-5 gap-x-3 text-center">
+    <div class="relative">
+        <div class="flex justify-start text-xs -ml-1">
+            <a :href="`${props.links.thisLink}/projects`" class="block pl-1 pr-3 py-1 mr-4 hover:bg-gray-700 text-center text-gray-400">Projects</a>
+            <a :href="`${props.links.thisLink}/calendar`" class="block pl-1 pr-3 py-1 ml-4 bg-gray-700 text-center text-gray-400">Calendar</a>
+        </div>
+
+        <div class="mt-10 mb-20 grid grid-cols-7 gap-y-5 gap-x-3 text-center">
             <div v-for="(day, index) in daysOfWeek" :key="index" class="text-left font-bold text-gray-400 text-sm">
                 {{ day }}
             </div>
@@ -45,10 +50,9 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
                 <div v-if="day === null || !day.hours">&nbsp;</div>
             </div>
         </div>
-
     </div>
     <div class="absolute w-full" style="bottom: 32px;">
-        <div class="mb-4 text-sm flex justify-around">
+        <div class="mt-4 text-sm flex justify-around">
             <div class="flex justify-around">
                 <span class="block text-gray-400">{{ props.links.caption }}</span>
 
@@ -57,7 +61,7 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
             </div>
         </div>
 
-        <div class="flex justify-around items-center">
+        <div class="mt-4 flex justify-around items-center">
             <Navigation active="month" />
         </div>
     </div>

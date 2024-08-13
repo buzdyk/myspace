@@ -2,7 +2,7 @@
 const pages = [
     { path: 'today', caption: 'Today' },
     { path: 'month', caption: 'Month' },
-    // { path: 'settings', caption: 'Settings' },
+    { path: 'settings', caption: 'Settings' },
 ]
 
 const props = defineProps({
