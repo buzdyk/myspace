@@ -26,7 +26,6 @@ class TodayController extends Controller
         if ($settings->valid() === false) {
             return redirect('/settings');
         }
-
         $date = $request->dayOfMonth()->setDay((int) $request->day);
         $this->cacheValues($date, $trackers, $cache);
 
@@ -34,9 +33,14 @@ class TodayController extends Controller
             ...$today->setDay($date)->toArray(),
             'nav' => [
                 ...$request->getLinks(),
-                'caption' => $date->format('F, jS')
+                'monthLink' => strtolower($date->format('/Y/F') . '/calendar'),
+                'day' => $date->format('jS'),
+                'month' => $date->format('F'),
+                'year' => $date->format('Y'),
+//                'caption' => $date->format('F, jS')
             ],
             'isToday' => $date->isSameDay(now()),
+            'readableDate' => $date->diffForHumans(now())
         ]);
     }
 

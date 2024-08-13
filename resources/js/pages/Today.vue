@@ -15,17 +15,23 @@ const props = defineProps({
     pace: { type: Number, required: true },
     nav: { type: Object, required: true },
     isToday: { type: Boolean, required: true },
+    readableDate: { type: String, required: true },
 })
 
-// setTimeout(() => router.visit(window.location.pathname, {
-//     except: [],
-// }), 15000)
+setTimeout(() => router.visit(window.location.pathname, {
+    except: [],
+}), 15000)
 </script>
 
 <template>
 <div class="h-screen flex justify-around items-center font-mono text-xl selection:bg-red-700 selection:text-white">
     <div class="flex justify-between w-96">
-        <Today :runningHours="props.runningHours" :todayHours="props.todayHours" :todayPercent="props.todayPercent" />
+        <Today
+            :isToday="props.isToday"
+            :runningHours="props.runningHours"
+            :todayHours="props.todayHours"
+            :todayPercent="props.todayPercent"
+        />
         <Month :monthPercent="props.monthPercent" :monthHours="props.monthHours" />
         <Pace :pace="props.pace" />
     </div>
@@ -37,16 +43,21 @@ const props = defineProps({
     <!--            </div>-->
 
     <div class="absolute w-96" style="bottom: 32px;">
-        <div class="mt-16 text-sm flex justify-around">
-            <div class="mb-4 flex justify-between">
-                <span class="block text-gray-500">{{ props.nav.caption }}</span>
+
+        <div class="mt-4 text-sm flex justify-around">
+            <div class="relative flex justify-between items-center">
+                <a :href="props.nav.monthLink" class="block text-gray-500">
+                    {{ props.nav.month }}, {{ props.nav.day }} {{ props.nav.year }}
+                </a>
 
                 <a :href="props.nav.prevLink" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
                 <a :href="props.nav.nextLink" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
+
+<!--                <div class="ml-3 flex justify-around text-xs text-gray-500">{{ readableDate }}</div>-->
             </div>
         </div>
 
-        <div class="flex justify-around items-center">
+        <div class="mt-4 flex justify-around items-center">
             <Navigation :active="isToday ? 'today' : null" />
         </div>
     </div>
