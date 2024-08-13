@@ -20,7 +20,7 @@ const props = defineProps({
 
 setTimeout(() => router.visit(window.location.pathname, {
     except: [],
-}), 15000)
+}), 120000)
 </script>
 
 <template>

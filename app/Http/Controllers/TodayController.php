@@ -27,7 +27,10 @@ class TodayController extends Controller
             return redirect('/settings');
         }
         $date = $request->dayOfMonth()->setDay((int) $request->day);
-        $this->cacheValues($date, $trackers, $cache);
+
+        try {
+            $this->cacheValues($date, $trackers, $cache);
+        } catch (\Exception $e) {}
 
         return Inertia::render('Today', [
             ...$today->setDay($date)->toArray(),
