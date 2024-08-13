@@ -2,41 +2,64 @@
 import Navigation from "../components/Navigation.vue"
 import EmptyPlaceholder from './month/EmptyPlaceholder.vue'
 import Overview from './month/Overview.vue'
-import DailyHours from './month/DailyHours.vue'
 
 const props = defineProps({
     projects: { type: Array, required: true },
     monthHours: { type: Number, required: true },
-    dailyHours: { type: Array, required: true },
     dayOfMonth: { type: String, required: true },
     weekdays: { type: Number, required: true },
     weekends: { type: Number, required: true },
-    prevMonthLink: { type: String, required: true },
-    nextMonthLink: { type: String, required: true },
+    links: { type: Array, required: true },
 })
 </script>
 
 <template>
-<div class="h-screen flex items-center justify-center font-mono">
-    <div class="w-1/2 text-2xl selection:bg-red-700 selection:text-white">
-        <Overview v-if="monthHours" :projects="props.projects" :monthHours="props.monthHours" />
-        <EmptyPlaceholder v-else />
-
-        <div class="mt-16">
-            {{ props.dayOfMonth }}
-
-            <a :href="props.prevMonthLink" class="ml-4 text-gray-600 hover:text-gray-100 hover:border-b cursor-pointer">&lt;</a>
-            <a :href="props.nextMonthLink" class="ml-4 text-gray-600 hover:text-gray-100 hover:border-b cursor-pointer">&gt;</a>
+<div class="h-screen flex justify-center items-center font-mono">
+    <div class="text-lg selection:bg-red-700 selection:text-white">
+        <div class="flex justify-start text-xs -ml-1">
+            <a :href="`${props.links.thisLink}/projects`" class="block pl-1 pr-5 py-1 mr-4 bg-gray-700 text-center text-gray-400">Projects</a>
+            <a :href="`${props.links.thisLink}/calendar`" class="block pl-1 pr-5 py-1 ml-4 hover:bg-gray-700 text-center text-gray-400">Calendar</a>
         </div>
-        <div class="mt-6 text-sm inline-block text-gray-600 hover:text-gray-200">
-            {{ props.weekdays }} weekdays <br> {{ props.weekends }} weekends
+
+        <div class="mt-10 mb-20">
+            <Overview v-if="monthHours" :projects="props.projects" :monthHours="props.monthHours" />
+            <EmptyPlaceholder v-else />
+        </div>
+        <!--        <div class="mt-6 text-sm inline-block text-gray-600 hover:text-gray-200">-->
+<!--            {{ props.weekdays }} weekdays <br> {{ props.weekends }} weekends-->
+<!--        </div>-->
+    </div>
+
+    <div class="absolute w-full" style="bottom: 32px;">
+        <div class="mb-4 text-sm flex justify-around">
+            <div class="flex justify-around">
+                <span class="block text-gray-400">{{ props.links.caption }}</span>
+
+                <a :href="`${props.links.prevLink}/projects`" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
+                <a :href="`${props.links.nextLink}/projects`" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
+            </div>
+        </div>
+
+        <div class="flex justify-around items-center">
+            <Navigation active="month" />
         </div>
     </div>
 
-    <div v-if="monthHours" class="absolute h-screen flex items-center pr-36 text-xs text-gray-600 hover:text-white" style="left:48px">
-        <DailyHours :daily-hours="props.dailyHours" />
-    </div>
 
-    <Navigation active="month" />
+    <!--    <div class="mt-16 flex justify-between items-end">-->
+<!--        <Navigation active="month">-->
+<!--            <div class="mb-1 text-xs flex justify-start ">-->
+<!--                <span class="block text-gray-400">Projects</span>-->
+<!--                <a :href="`${props.links.thisLink}/calendar`" class="ml-2 text-xs block text-gray-600 hover:text-gray-100">Calendar</a>-->
+<!--            </div>-->
+<!--        </Navigation>-->
+
+<!--        <div class="text-sm flex justify-start">-->
+<!--            <span class="block text-gray-400">July 2024</span>-->
+
+<!--            <a :href="`${props.links.prevLink}/projects`" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>-->
+<!--            <a :href="`${props.links.nextLink}/projects`" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>-->
+<!--        </div>-->
+<!--    </div>-->
 </div>
 </template>

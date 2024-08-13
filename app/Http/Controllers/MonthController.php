@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MonthRequest;
 use App\Repositories\MonthMeta;
 use App\Repositories\Preferences;
 use App\Repositories\Trackers;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Inertia\Controller;
 use Inertia\Inertia;
 
 class MonthController extends Controller
 {
-    public function index(Request $request, Trackers $trackers, Preferences $preferences, MonthMeta $monthMeta)
+    public function index(MonthRequest $request, Trackers $trackers, Preferences $preferences, MonthMeta $monthMeta)
     {
         if ($preferences->valid() === false) {
             return redirect('/settings');
         }
 
-        $dayOfMonth = $this->getDayOfMonth($request);
+        $dayOfMonth = $request->dayOfMonth();
 
         $dailyHours = $trackers->getDailyHours($dayOfMonth);
         foreach ($dailyHours as $date => $hours) {
@@ -40,35 +40,17 @@ class MonthController extends Controller
             'dayOfMonth' => $dayOfMonth->format('F, Y'),
             'weekdays' => $weekdays,
             'weekends' => $weekends,
-            'prevMonthLink' => '/' . strtolower($dayOfMonth->copy()->subMonth()->format('Y/F')),
-            'nextMonthLink' => '/' . strtolower($dayOfMonth->copy()->addMonth()->format('Y/F')),
+            'links' => [
+                ...$request->getLinks(),
+                'caption' => $dayOfMonth->format('F Y'),
+            ]
         ]);
-    }
-
-    private function getDayOfMonth(Request $request)
-    {
-        $month = match($request->month) {
-            'january' => 1,
-            'february' => 2,
-            'march' => 3,
-            'april' => 4,
-            'may' => 5,
-            'june' => 6,
-            'july' => 7,
-            'august' => 8,
-            'september' => 9,
-            'october' => 10,
-            'november' => 11,
-            'december' => 12,
-        };
-
-        return (new Carbon())->setMonth($month)->setYear((int) $request->year);
     }
 
     public function redirect()
     {
         $date = new Carbon();
 
-        return redirect()->to($date->year . '/' . strtolower($date->monthName));
+        return redirect()->to($date->year . '/' . strtolower($date->monthName) . '/calendar');
     }
 }

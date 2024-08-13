@@ -31,10 +31,10 @@ const formatMoney = number => {
         <div class="w-32 text-right">Earned</div>
     </div>
 
-    <div v-for="project in projects" class="flex justify-between">
+    <div v-for="project in projects" v-show="project.hours" class="flex justify-between">
         <div class="w-3/4 flex justify-between">
             {{ project.projectTitle }}
-            <div class="flex-grow border-b-dots mx-3 mb-1"></div>
+            <div class="flex-grow border-b-dots mx-3 mb-1 pr-32"></div>
         </div>
         <div class="text-right">{{ hoursToString(project.hours) }}</div>
         <div class="w-32 text-right">

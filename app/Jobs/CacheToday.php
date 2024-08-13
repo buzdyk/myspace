@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Repositories\TodayCache;
 use App\Repositories\Trackers;
+use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,7 +17,7 @@ class CacheToday implements ShouldQueue, ShouldBeUnique
 
     public int $uniqueFor = 120;
 
-    public function __construct()
+    public function __construct(protected Carbon $date)
     {
         //
     }
