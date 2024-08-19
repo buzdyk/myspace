@@ -2,11 +2,16 @@
 
 namespace App\Http\Requests;
 
+use App\Repositories\Trackers;
 use Illuminate\Foundation\Http\FormRequest;
 use Carbon\Carbon;
 
 class MonthRequest extends FormRequest
 {
+    public function __construct(
+        protected Trackers $trackers,
+    ) {}
+
     public function dayOfMonth(): Carbon
     {
         $month = match($this->month) {
@@ -31,6 +36,12 @@ class MonthRequest extends FormRequest
 
     }
 
+    public function getProjects()
+    {
+        $day = $this->dayOfMonth();
+        $this->trackers->getMonthlyTimeByProject($day);
+    }
+
 
     public function getLinks(): array
     {
@@ -44,5 +55,11 @@ class MonthRequest extends FormRequest
             'prevLink' => $route($hasDay ? $day->copy()->subDay() : $day->copy()->subMonth()),
             'nextLink' => $route($hasDay ? $day->copy()->addDay() : $day->copy()->addMonth()),
         ];
+    }
+
+    public function getReadableDay()
+    {
+        $date = $this->dayOfMonth();
+        $format = ($date->year === now()->year) ? '' : '';
     }
 }

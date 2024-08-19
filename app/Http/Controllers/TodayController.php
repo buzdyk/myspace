@@ -34,12 +34,13 @@ class TodayController extends Controller
 
         return Inertia::render('Today', [
             ...$today->setDay($date)->toArray(),
+            'projects' => $request->getProjects(),
             'nav' => [
                 ...$request->getLinks(),
                 'monthLink' => strtolower($date->format('/Y/F') . '/calendar'),
                 'day' => $date->format('jS'),
                 'month' => $date->format('F'),
-                'year' => $date->format('Y'),
+                'year' => $date->isSameYear(now()) ? '' : $date->format('Y'),
 //                'caption' => $date->format('F, jS')
             ],
             'isToday' => $date->isSameDay(now()),

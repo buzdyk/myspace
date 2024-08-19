@@ -67,7 +67,7 @@ class Trackers
         return $this->trackers->reduce($reducer, 0) / 3600;
     }
 
-    public function getMonthlyTimeByProject(Carbon $dayOfMonth): ProjectTimes
+    public function getMonthlyTimeByProject(Carbon $dayOfMonth, bool $singleDay = false): ProjectTimes
     {
         $map = new ProjectTimes();
 

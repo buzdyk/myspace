@@ -39,7 +39,7 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
 
             <div v-for="day in props.days" class="group relative">
                 <div v-if="day" class="text-gray-500 text-left text-xs">
-                    <a :href="day.link">{{ day.date }}</a>
+                    <a :href="day.link" :class="{'border-b border-b-red-600': day.isToday}">{{ day.date }}</a>
                 </div>
 
                 <div v-if="day && day.hours" class="flex w-16 cursor-none justify-start mt-2 text-sm">
@@ -67,3 +67,5 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
     </div>
 </div>
 </template>
+
+

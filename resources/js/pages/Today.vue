@@ -25,22 +25,33 @@ setTimeout(() => router.visit(window.location.pathname, {
 
 <template>
 <div class="h-screen flex justify-around items-center font-mono text-xl selection:bg-red-700 selection:text-white">
-    <div class="flex justify-between w-96">
-        <Today
-            :isToday="props.isToday"
-            :runningHours="props.runningHours"
-            :todayHours="props.todayHours"
-            :todayPercent="props.todayPercent"
-        />
-        <Month :monthPercent="props.monthPercent" :monthHours="props.monthHours" />
-        <Pace :pace="props.pace" />
-    </div>
+    <div>
+        <div class="flex justify-between w-96">
+            <Today
+                :isToday="props.isToday"
+                :runningHours="props.runningHours"
+                :todayHours="props.todayHours"
+                :todayPercent="props.todayPercent"
+            />
+            <Month :monthPercent="props.monthPercent" :monthHours="props.monthHours" />
+            <Pace :pace="props.pace" />
+        </div>
 
-    <!--            progress bar-->
-    <!--            <div class="mt-8 flex justify-start">&#45;&#45;}}-->
-    <!--                <div style="width: {{ $passed }}%; height: 3px;" class="bg-gray-600">&nbsp;</div>-->
-    <!--                <div style="width: {{ 100 - $passed }}%;  height: 3px;" class="bg-gray-700">&nbsp;</div>-->
-    <!--            </div>-->
+<!--        hours by project feature -->
+<!--        <div class="text-sm mt-10 text-gray-600">-->
+<!--            <div class="flex justify-between hover:text-gray-200">-->
+<!--                <div>Project 1</div>-->
+<!--                <div></div>-->
+<!--                <div>1:28</div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        ux rework. progress bar, can be stacked eg today: tracked + active + remaining -->
+<!--        <div class="mt-8 flex justify-start">&#45;&#45;}}-->
+<!--            <div style="width: {{ $passed }}%; height: 3px;" class="bg-gray-600">&nbsp;</div>-->
+<!--            <div style="width: {{ 100 - $passed }}%;  height: 3px;" class="bg-gray-700">&nbsp;</div>-->
+<!--         </div>-->
+    </div>
 
     <div class="absolute w-96" style="bottom: 32px;">
 
@@ -48,13 +59,11 @@ setTimeout(() => router.visit(window.location.pathname, {
             <div class="relative flex justify-between items-center text-gray-500">
 
                 <a :href="props.nav.monthLink" class="block">
-                    {{ props.nav.month }},&nbsp;
+                    {{ props.nav.month }}&nbsp;
                 </a> {{ props.nav.day }} {{ props.nav.year }}
 
                 <a :href="props.nav.prevLink" class="ml-3 text-gray-600 hover:text-gray-200">&lt;</a>
                 <a :href="props.nav.nextLink" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
-
-<!--                <div class="ml-3 flex justify-around text-xs text-gray-500">{{ readableDate }}</div>-->
             </div>
         </div>
 

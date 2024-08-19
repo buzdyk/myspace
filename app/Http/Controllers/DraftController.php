@@ -37,6 +37,7 @@ class DraftController
                 'hours' => $hours,
                 'date' => $carbon->format('d'),
                 'isWorkday' => $carbon->isWeekday(),
+                'isToday' => $carbon->isSameDay(now()),
                 'link' => strtolower($carbon->format('/Y/F/d'))
             ];
         }
