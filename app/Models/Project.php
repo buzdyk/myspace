@@ -4,11 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tracker extends Model
+class Project extends Model
 {
-    protected $casts = [
-        'token' => 'encrypted',
-    ];
-
     public $timestamps = false;
 }

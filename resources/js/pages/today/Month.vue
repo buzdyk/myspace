@@ -10,8 +10,8 @@ const props = defineProps({
 <template>
 <div>
     <div class="text-gray-600">Month</div>
-    <div class="mt-4 group">
-        <span class="group-hover:hidden">{{ props.monthPercent }}%</span>
+    <div class="mt-4 text-left group w-12">
+        <span class=" group-hover:hidden">{{ props.monthPercent }}%</span>
         <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
             {{ hoursToString(props.monthHours) }}
         </span>
