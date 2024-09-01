@@ -7,15 +7,17 @@ use App\Repositories\Trackers;
 use Carbon\Carbon;
 use Inertia\Inertia;
 
-class DraftController
+class CalendarController
 {
     public function index(Trackers $trackers, MonthRequest $request)
     {
         $dayOfMonth = $request->dayOfMonth();
         $days = $this->getDays($dayOfMonth, $trackers);
+        $hours = array_reduce($days, fn ($carry, $value) => $carry + ($value && $value['hours'] ? $value['hours'] : 0), 0);
 
-        return Inertia::render('Draft', [
+        return Inertia::render('Calendar', [
             'days' => array_values($days),
+            'hours' => $hours,
             'links' => [
                 ...$request->getNav(),
                 'caption' => $dayOfMonth->format('F Y'),
@@ -23,7 +25,7 @@ class DraftController
         ]);
     }
 
-    protected function getDays(Carbon $dayOfMonth, Trackers $trackers)
+    protected function getDays(Carbon $dayOfMonth, Trackers $trackers): array
     {
         $days = $trackers->getDailyHours($dayOfMonth);
         $firstDay = null;

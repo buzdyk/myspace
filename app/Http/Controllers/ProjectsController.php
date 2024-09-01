@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Inertia\Controller;
 use Inertia\Inertia;
 
-class MonthController extends Controller
+class ProjectsController extends Controller
 {
     public function index(MonthRequest $request, Trackers $trackers, Preferences $preferences, MonthMeta $monthMeta)
     {
@@ -33,7 +33,7 @@ class MonthController extends Controller
         $projects = $trackers->getMonthlyTimeByProject($dayOfMonth);
         list (, $weekdays, $weekends) = $monthMeta->getWeekdaysMeta($dayOfMonth);
 
-        return Inertia::render('Month', [
+        return Inertia::render('Projects', [
             'projects' => $projects->toArray(),
             'monthHours' => $projects->getHours(),
             'dailyHours' => array_values($dailyHours),

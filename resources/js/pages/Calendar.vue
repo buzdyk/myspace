@@ -4,11 +4,13 @@ import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
 import { hoursToString, formatMoney } from './../helpers.js'
+import EmptyPlaceholder from './projects/EmptyPlaceholder.vue'
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 const props = defineProps({
     days: { type: Array, required: true },
+    hours: { type: Number, required: true },
     links: { type: Array, required: true },
 })
 
@@ -30,27 +32,34 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
             <a :href="`${props.links.thisLink}/calendar`" class="block pl-1 pr-3 py-1 ml-4 bg-gray-700 text-center text-gray-400">Calendar</a>
         </div>
 
-        <div class="mt-10 mb-20 grid grid-cols-7 gap-y-5 gap-x-3 text-center">
-            <div v-for="(day, index) in daysOfWeek" :key="index" class="text-left font-bold text-gray-400 text-sm">
-                {{ day }}
+
+        <div class="mt-10 mb-20">
+            <div v-if="!props.hours" class="text-lg mt-8">
+                <EmptyPlaceholder />
             </div>
-
-            <div class="col-span-7 border-b border-b-gray-700"></div>
-
-            <div v-for="day in props.days" class="group relative">
-                <div v-if="day" class="text-gray-500 text-left text-xs">
-                    <a :href="day.link" :class="{'border-b border-b-red-600': day.isToday}">{{ day.date }}</a>
+            <div v-else class="grid grid-cols-7 gap-y-5 gap-x-3 text-center">
+                <div v-for="(day, index) in daysOfWeek" :key="index" class="text-left font-bold text-gray-400 text-sm">
+                    {{ day }}
                 </div>
 
-                <div v-if="day && day.hours" class="flex w-16 cursor-none justify-start mt-2 text-sm">
-                    <div class="group-hover:hidden">{{ hoursToString(day.hours) }}</div>
-                    <div class="group-hover:block hidden">{{ formatMoney(day.hours * hourlyRate) }}</div>
-                </div>
+                <div class="col-span-7 border-b border-b-gray-700"></div>
 
-                <div v-if="day === null || !day.hours">&nbsp;</div>
+                <div v-for="day in props.days" class="group relative">
+                    <div v-if="day" class="text-gray-500 text-left text-xs">
+                        <a :href="day.link" :class="{'border-b border-b-red-600': day.isToday}">{{ day.date }}</a>
+                    </div>
+
+                    <div v-if="day && day.hours" class="flex w-16 cursor-none justify-start mt-2 text-sm">
+                        <div class="group-hover:hidden">{{ hoursToString(day.hours) }}</div>
+                        <div class="group-hover:block hidden">{{ formatMoney(day.hours * hourlyRate) }}</div>
+                    </div>
+
+                    <div v-if="day === null || !day.hours">&nbsp;</div>
+                </div>
             </div>
         </div>
     </div>
+
     <div class="absolute w-full" style="bottom: 32px;">
         <div class="mt-4 text-sm flex justify-around">
             <div class="flex justify-around">
