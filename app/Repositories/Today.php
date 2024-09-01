@@ -36,6 +36,7 @@ class Today
             'todayPercent' => $this->todayPercent(),
             'monthPercent' => $this->monthPercent(),
             'pace' => $this->pace(),
+            'isToday' => $this->day->isSameDay(now()),
         ];
     }
 

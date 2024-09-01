@@ -40,10 +40,7 @@ class MonthController extends Controller
             'dayOfMonth' => $dayOfMonth->format('F, Y'),
             'weekdays' => $weekdays,
             'weekends' => $weekends,
-            'links' => [
-                ...$request->getLinks(),
-                'caption' => $dayOfMonth->format('F Y'),
-            ]
+            'links' => $request->getNav(),
         ]);
     }
 

@@ -15,7 +15,6 @@ const props = defineProps({
     pace: { type: Number, required: true },
     nav: { type: Object, required: true },
     isToday: { type: Boolean, required: true },
-    readableDate: { type: String, required: true },
 })
 
 setTimeout(() => router.visit(window.location.pathname, {

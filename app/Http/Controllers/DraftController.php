@@ -17,7 +17,7 @@ class DraftController
         return Inertia::render('Draft', [
             'days' => array_values($days),
             'links' => [
-                ...$request->getLinks(),
+                ...$request->getNav(),
                 'caption' => $dayOfMonth->format('F Y'),
             ],
         ]);

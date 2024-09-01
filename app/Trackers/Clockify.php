@@ -6,6 +6,7 @@ use App\Interfaces\TimeTracker;
 use App\Types\ProjectTimes;
 use App\Types\ProjectTime;
 use Carbon\Carbon;
+use Faker\Provider\Image;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Cache;
 
@@ -80,25 +81,12 @@ class Clockify extends Rest implements TimeTracker
 
     public function getUserId(): ?string
     {
-        return "664b5f396c802f039134f95d";
-
-//        return Cache::rememberForever('mayven_user_id', function() {
-//            $res = $this->get("/api/hydrate");
-//            $data = json_decode($res->getBody()->getContents());
-//            return $data->data->me->data->id;
-//        });
+        return config('services.clockify.user_id');
     }
 
     public function getRunningSeconds(): int
     {
         return 0;
-//        $res = $this->get("/api/timer");
-//        $current = json_decode($res->getBody()->getContents());
-//
-//        $now = new Carbon();
-//        $then = new Carbon($current?->data?->started_at);
-//
-//        return $now->diffInSeconds($then, true);
     }
 
     public function getMonthlyTimeByProject(Carbon $dayOfMonth): ProjectTimes
@@ -107,7 +95,7 @@ class Clockify extends Rest implements TimeTracker
         $eom = $dayOfMonth->copy()->endOfMonth();
 
         $projectTimes = new ProjectTimes();
-        $projectTimes->add(new ProjectTime('clockify', 'x', 'Hello Cake', $this->getSeconds($som, $eom)));
+        $projectTimes->add(new ProjectTime('clockify', 'x', generateRandomString(10), $this->getSeconds($som, $eom)));
 
         return $projectTimes;
     }

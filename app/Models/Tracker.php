@@ -9,6 +9,4 @@ class Tracker extends Model
     protected $casts = [
         'token' => 'encrypted',
     ];
-
-    public $timestamps = false;
 }
