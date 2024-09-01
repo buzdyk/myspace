@@ -12,12 +12,8 @@ use Inertia\Inertia;
 
 class ProjectsController extends Controller
 {
-    public function index(MonthRequest $request, Trackers $trackers, Preferences $preferences, MonthMeta $monthMeta)
+    public function index(MonthRequest $request, Trackers $trackers, MonthMeta $monthMeta)
     {
-        if ($preferences->valid() === false) {
-            return redirect('/settings');
-        }
-
         $dayOfMonth = $request->dayOfMonth();
 
         $dailyHours = $trackers->getDailyHours($dayOfMonth);

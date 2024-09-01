@@ -12,6 +12,7 @@ class CalendarController
     public function index(Trackers $trackers, MonthRequest $request)
     {
         $dayOfMonth = $request->dayOfMonth();
+
         $days = $this->getDays($dayOfMonth, $trackers);
         $hours = array_reduce($days, fn ($carry, $value) => $carry + ($value && $value['hours'] ? $value['hours'] : 0), 0);
 

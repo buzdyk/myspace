@@ -21,11 +21,8 @@ class TodayController extends Controller
         return redirect()->to($path);
     }
 
-    public function index(DayRequest $request, Trackers $trackers, Preferences $settings, TodayCache $cache, Today $today)
+    public function index(DayRequest $request, Trackers $trackers, TodayCache $cache, Today $today)
     {
-        if ($settings->valid() === false) {
-            return redirect('/settings');
-        }
         $date = $request->dayOfMonth()->setDay((int) $request->day);
 
         try {

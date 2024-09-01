@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\Router;
 use \App\Http\Controllers\{
     SettingsController, CalendarController, ProjectsController, TodayController
 };
@@ -13,9 +14,11 @@ Route::get('/', function() {
 Route::get('/settings', [SettingsController::class, 'index']);
 Route::post('/settings', [SettingsController::class, 'store']);
 
-Route::get('/month', [ProjectsController::class, 'redirect']);
-Route::get('/{year}/{month}/calendar', [CalendarController::class, 'index']);
-Route::get('/{year}/{month}/projects', [ProjectsController::class, 'index']);
+Route::middleware(\App\Http\Middleware\RedirectIfSettingsNotValid::class)->group(function(Router $router) {
+    $router->get('/month', [ProjectsController::class, 'redirect']);
+    $router->get('/{year}/{month}/calendar', [CalendarController::class, 'index']);
+    $router->get('/{year}/{month}/projects', [ProjectsController::class, 'index']);
 
-Route::get('/today', [TodayController::class, 'redirect']);
-Route::get('/{year}/{month}/{day}', [TodayController::class, 'index']);
+    $router->get('/today', [TodayController::class, 'redirect']);
+    $router->get('/{year}/{month}/{day}', [TodayController::class, 'index']);
+});
