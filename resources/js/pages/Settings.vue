@@ -28,7 +28,7 @@ const resetMessage = () => {
 
 <template>
 <div class="h-screen flex items-center justify-center font-mono">
-    <div class="absolute w-full" style="bottom: 32px;">
+    <div class="absolute w-full" style="bottom: 40px;">
         <div class="flex justify-around items-center">
             <Navigation active="settings" />
         </div>

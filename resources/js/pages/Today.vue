@@ -52,10 +52,10 @@ setTimeout(() => router.visit(window.location.pathname, {
 <!--         </div>-->
     </div>
 
-    <div class="absolute w-96" style="bottom: 32px;">
+    <div class="absolute w-96" style="bottom: 40px;">
 
-        <div class="mt-4 text-sm flex justify-around">
-            <div class="relative flex justify-between items-center text-gray-500">
+        <div class="mb-6 text-base flex justify-around">
+            <div class="relative flex justify-between items-center text-gray-400">
 
                 <a :href="props.nav.monthLink" class="block">
                     {{ props.nav.month }}&nbsp;

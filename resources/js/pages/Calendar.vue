@@ -34,17 +34,14 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
 
 
         <div class="mt-10 mb-20">
-            <div v-if="!props.hours" class="text-lg mt-8">
-                <EmptyPlaceholder />
-            </div>
-            <div v-else class="grid grid-cols-7 gap-y-5 gap-x-3 text-center">
+            <div class="grid grid-cols-7 gap-y-5 gap-x-3 text-center">
                 <div v-for="(day, index) in daysOfWeek" :key="index" class="text-left font-bold text-gray-400 text-sm">
                     {{ day }}
                 </div>
 
                 <div class="col-span-7 border-b border-b-gray-700"></div>
 
-                <div v-for="day in props.days" class="group relative">
+                <div v-for="day in props.days" class="group relative w-16">
                     <div v-if="day" class="text-gray-500 text-left text-xs">
                         <a :href="day.link" :class="{'border-b border-b-red-600': day.isToday}">{{ day.date }}</a>
                     </div>
@@ -60,8 +57,8 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
         </div>
     </div>
 
-    <div class="absolute w-full" style="bottom: 32px;">
-        <div class="mt-4 text-sm flex justify-around">
+    <div class="absolute w-full" style="bottom: 40px;">
+        <div class="mb-6 text-base flex justify-around">
             <div class="flex justify-around">
                 <span class="block text-gray-400">{{ props.links.caption }}</span>
 

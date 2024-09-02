@@ -27,8 +27,8 @@ const props = defineProps({
         </div>
     </div>
 
-    <div class="absolute w-full" style="bottom: 32px;">
-        <div class="mb-4 text-sm flex justify-around">
+    <div class="absolute w-full" style="bottom: 40px;">
+        <div class="mb-6 text-base flex justify-around">
             <div class="flex justify-around">
                 <span class="block text-gray-400">{{ props.links.caption }}</span>
 
