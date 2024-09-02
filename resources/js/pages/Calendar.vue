@@ -4,7 +4,6 @@ import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 
 import { hoursToString, formatMoney } from './../helpers.js'
-import EmptyPlaceholder from './projects/EmptyPlaceholder.vue'
 
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
@@ -51,13 +50,13 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
                         <div class="group-hover:block hidden">{{ formatMoney(day.hours * hourlyRate) }}</div>
                     </div>
 
-                    <div v-if="day === null || !day.hours">&nbsp;</div>
+                    <div v-if="day === null || !day.hours" class="mt-2">&nbsp;</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="absolute w-full" style="bottom: 40px;">
+    <Navigation active="month">
         <div class="mb-6 text-base flex justify-around">
             <div class="flex justify-around">
                 <span class="block text-gray-400">{{ props.links.caption }}</span>
@@ -66,11 +65,7 @@ const dailyGoal = computed(() => usePage().props.dailyGoal),
                 <a :href="`${props.links.nextLink}/calendar`" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
             </div>
         </div>
-
-        <div class="mt-4 flex justify-around items-center">
-            <Navigation active="month" />
-        </div>
-    </div>
+    </Navigation>
 </div>
 </template>
 

@@ -27,7 +27,8 @@ const props = defineProps({
         </div>
     </div>
 
-    <div class="absolute w-full" style="bottom: 40px;">
+
+    <Navigation active="month">
         <div class="mb-6 text-base flex justify-around">
             <div class="flex justify-around">
                 <span class="block text-gray-400">{{ props.links.caption }}</span>
@@ -36,10 +37,6 @@ const props = defineProps({
                 <a :href="`${props.links.nextLink}/projects`" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
             </div>
         </div>
-
-        <div class="flex justify-around items-center">
-            <Navigation active="month" />
-        </div>
-    </div>
+    </Navigation>
 </div>
 </template>

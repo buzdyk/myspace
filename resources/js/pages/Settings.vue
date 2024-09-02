@@ -28,12 +28,6 @@ const resetMessage = () => {
 
 <template>
 <div class="h-screen flex items-center justify-center font-mono">
-    <div class="absolute w-full" style="bottom: 40px;">
-        <div class="flex justify-around items-center">
-            <Navigation active="settings" />
-        </div>
-    </div>
-
     <div class="relative w-1/2 text-xl selection:bg-red-700 selection:text-white">
 
         <form @submit.prevent="saveSettings" >
@@ -72,6 +66,8 @@ const resetMessage = () => {
             </div>
         </form>
     </div>
+
+    <Navigation active="settings" />
 </div>
 </template>
 
