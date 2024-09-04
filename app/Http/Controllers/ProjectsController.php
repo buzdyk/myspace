@@ -29,7 +29,7 @@ class ProjectsController extends Controller
         $projects = $trackers->getMonthlyTimeByProject($dayOfMonth);
         list (, $weekdays, $weekends) = $monthMeta->getWeekdaysMeta($dayOfMonth);
 
-        return Inertia::render('Projects', [
+        return Inertia::render('month/Projects', [
             'projects' => $projects->toArray(),
             'monthHours' => $projects->getHours(),
             'dailyHours' => array_values($dailyHours),

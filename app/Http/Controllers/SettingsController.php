@@ -13,7 +13,7 @@ class SettingsController extends Controller
 {
     public function index(Request $request, Preferences $settings)
     {
-        return Inertia::render('Settings', [
+        return Inertia::render('settings/General', [
             'hourlyRate' => $settings->getHourlyRate(),
             'monthlyGoal' => $settings->getMonthlyGoal(),
             'dailyGoal' => $settings->getDailyGoal(),

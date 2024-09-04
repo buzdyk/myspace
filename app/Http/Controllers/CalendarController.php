@@ -16,7 +16,7 @@ class CalendarController
         $days = $this->getDays($dayOfMonth, $trackers);
         $hours = array_reduce($days, fn ($carry, $value) => $carry + ($value && $value['hours'] ? $value['hours'] : 0), 0);
 
-        return Inertia::render('Calendar', [
+        return Inertia::render('month/Calendar', [
             'days' => array_values($days),
             'hours' => $hours,
             'links' => [
