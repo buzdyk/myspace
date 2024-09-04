@@ -33,22 +33,22 @@ const resetMessage = () => {
             <form @submit.prevent="saveSettings" >
                 <div class="flex justify-between group">
                     <label for="hourlyRate" class="block">Hourly Rate</label>
-                    <div class="flex-grow border-b-dots mx-3 mb-1"></div>
-                    <input v-model="hourlyRate" type="number" step="0.01" class="border-b border-b-gray-700 block w-12 bg-transparent text-right text-gray-200 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
+                    <div class="flex-grow border-b-dots  ml-3 mr-1 mb-1"></div>
+                    <input v-model="hourlyRate" placeholder="xx" type="number" step="0.01" class="block w-12 bg-transparent text-right text-gray-200 focus:outline-none no-number-controls placeholder-gray-600" />
                     <div class="w-8 ml-4 text-sm text-gray-400" style="margin-top:7px;">usd</div>
                 </div>
 
                 <div class="mt-4 flex justify-between">
                     <label for="dailyGoal" class="block">Daily Goal</label>
-                    <div class="flex-grow border-b-dots mx-3 mb-1"></div>
-                    <input v-model="dailyGoal" type="number" step="0.01" class="border-b border-b-gray-700 block w-12 bg-transparent text-right text-gray-200 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
+                    <div class="flex-grow border-b-dots ml-3 mr-1 mb-1"></div>
+                    <input v-model="dailyGoal" placeholder="x" type="number" step="0.01" class="block w-12 bg-transparent text-right text-gray-200 focus:outline-none no-number-controls placeholder-gray-600" />
                     <div class="ml-4 w-8 text-sm text-gray-400" style="margin-top:7px;">hours</div>
                 </div>
 
                 <div class="mt-4 flex justify-between">
                     <label for="monthlyGoal" class="block">Monthly Goal</label>
-                    <div class="flex-grow border-b-dots mx-3 mb-1"></div>
-                    <input  v-model="monthlyGoal" type="number" step="0.01" class="border-b border-b-gray-700 block w-12 bg-transparent text-right focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
+                    <div class="flex-grow border-b-dots  ml-3 mr-1 mb-1"></div>
+                    <input  v-model="monthlyGoal" placeholder="xxx" type="number" step="0.01" class="block w-12 bg-transparent text-right focus:outline-none no-number-controls placeholder-gray-600" />
                     <div class="w-8 ml-4 text-sm text-gray-400" style="margin-top:7px;">hours</div>
                 </div>
 
@@ -77,5 +77,17 @@ const resetMessage = () => {
     background-position: bottom;
     background-size: 7px 1px;
     background-repeat: repeat-x;
+}
+
+.no-number-controls {
+    -webkit-appearance: textfield;
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.no-number-controls::-webkit-outer-spin-button,
+.no-number-controls::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
 }
 </style>
