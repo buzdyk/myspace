@@ -1,18 +1,25 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Routing\Router;
-use \App\Http\Controllers\{
-    SettingsController, CalendarController, ProjectsController, TodayController
+use App\Http\Controllers\Month\{
+    CalendarController,
+    ProjectsController
 };
+use App\Http\Controllers\Settings\{
+    TrackersController,
+    GeneralController
+};
+use App\Http\Controllers\TodayController;
+
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function() {
     return redirect()->to('/today');
 });
 
 
-Route::get('/settings', [SettingsController::class, 'index']);
-Route::post('/settings', [SettingsController::class, 'store']);
+Route::get('/settings', [GeneralController::class, 'index']);
+Route::post('/settings', [GeneralController::class, 'store']);
 
 Route::middleware(\App\Http\Middleware\RedirectIfSettingsNotValid::class)->group(function(Router $router) {
     $router->get('/month', [ProjectsController::class, 'redirect']);

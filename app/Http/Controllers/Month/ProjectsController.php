@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Month;
 
 use App\Http\Requests\MonthRequest;
 use App\Repositories\MonthMeta;
-use App\Repositories\Preferences;
 use App\Repositories\Trackers;
 use Carbon\Carbon;
 use Inertia\Controller;
