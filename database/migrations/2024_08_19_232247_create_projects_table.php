@@ -12,6 +12,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedInteger('tracker_id');
             $table->string('name');
+            $table->text('token');
 
             $table->foreign('tracker_id')
                 ->references('id')

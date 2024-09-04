@@ -18,6 +18,7 @@ Route::get('/', function() {
 });
 
 
+Route::get('/settings/trackers', [TrackersController::class, 'index']);
 Route::get('/settings', [GeneralController::class, 'index']);
 Route::post('/settings', [GeneralController::class, 'store']);
 

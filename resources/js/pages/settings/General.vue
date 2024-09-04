@@ -7,6 +7,7 @@ const props = defineProps({
     hourlyRate: { type: Number, required: true },
     dailyGoal: { type: Number, required: true },
     monthlyGoal: { type: Number, required: true },
+    navigation: { type: Object, required: true }
 })
 
 let hourlyRate = props.hourlyRate,
@@ -29,8 +30,14 @@ const resetMessage = () => {
 <template>
     <div class="h-screen flex items-center justify-center font-mono">
         <div class="relative w-1/2 text-xl selection:bg-red-700 selection:text-white">
+            <div class="text-lg selection:bg-red-700 selection:text-white">
+                <div class="flex justify-start text-xs -ml-1">
+                    <a :href="`${props.navigation.thisLink}/general`" class="block pl-1 pr-5 py-1 mr-4 bg-gray-700 text-center text-gray-400">General</a>
+                    <a :href="`${props.navigation.thisLink}/trackers`" class="block pl-1 pr-5 py-1 ml-4 hover:bg-gray-700 text-center text-gray-400">Trackers</a>
+                </div>
+            </div>
 
-            <form @submit.prevent="saveSettings" >
+            <form @submit.prevent="saveSettings" class="mt-10">
                 <div class="flex justify-between group">
                     <label for="hourlyRate" class="block">Hourly Rate</label>
                     <div class="flex-grow border-b-dots  ml-3 mr-1 mb-1"></div>

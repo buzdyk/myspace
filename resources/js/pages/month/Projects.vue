@@ -27,7 +27,6 @@ const props = defineProps({
             </div>
         </div>
 
-
         <Navigation active="month">
             <div class="mb-6 text-base flex justify-around">
                 <div class="flex justify-around">

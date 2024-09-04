@@ -11,7 +11,11 @@ class TrackersController extends Controller
 {
     public function index(Request $request)
     {
-        return Inertia::render('settings/Trackers', []);
+        return Inertia::render('settings/Trackers', [
+            'navigation' => [
+                'thisLink' => '/settings'
+            ]
+        ]);
     }
 
     public function store(Request $request, Preferences $settings)

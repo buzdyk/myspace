@@ -15,6 +15,9 @@ class GeneralController extends Controller
             'hourlyRate' => $settings->getHourlyRate(),
             'monthlyGoal' => $settings->getMonthlyGoal(),
             'dailyGoal' => $settings->getDailyGoal(),
+            'navigation' => [
+                'thisLink' => '/settings'
+            ]
         ]);
     }
 
