@@ -15,7 +15,6 @@ const props = defineProps({
     pace: { type: Number, required: true },
     nav: { type: Object, required: true },
     isToday: { type: Boolean, required: true },
-    readableDate: { type: String, required: true },
 })
 
 setTimeout(() => router.visit(window.location.pathname, {
@@ -53,10 +52,9 @@ setTimeout(() => router.visit(window.location.pathname, {
 <!--         </div>-->
     </div>
 
-    <div class="absolute w-96" style="bottom: 32px;">
-
-        <div class="mt-4 text-sm flex justify-around">
-            <div class="relative flex justify-between items-center text-gray-500">
+    <Navigation :active="isToday ? 'today' : null">
+        <div class="mb-6 text-base flex justify-around">
+            <div class="relative flex justify-between items-center text-gray-400">
 
                 <a :href="props.nav.monthLink" class="block">
                     {{ props.nav.month }}&nbsp;
@@ -66,10 +64,6 @@ setTimeout(() => router.visit(window.location.pathname, {
                 <a :href="props.nav.nextLink" class="ml-1 text-gray-600 hover:text-gray-200">&gt;</a>
             </div>
         </div>
-
-        <div class="mt-4 flex justify-around items-center">
-            <Navigation :active="isToday ? 'today' : null" />
-        </div>
-    </div>
+    </Navigation>
 </div>
 </template>

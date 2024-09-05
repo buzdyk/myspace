@@ -21,11 +21,11 @@ const props = defineProps({
         ></div>
         <div v-if="props.runningHours"
              class="absolute text-sm px-4 py-2 font-bold text-gray-700 hover:text-gray-200 cursor-none"
-             style="left: -135px; top: 0px;"
+             style="left: -135px; top: 0;"
         >{{ hoursToString(props.runningHours) }}</div>
     </div>
 
-    <div class="mt-4 group">
+    <div class="mt-4 group w-12">
         <span class="group-hover:hidden">{{ props.todayPercent }}%</span>
         <span class="text-gray-800 hidden group-hover:inline-block group-hover:text-gray-200">
             {{ hoursToString(props.todayHours) }}

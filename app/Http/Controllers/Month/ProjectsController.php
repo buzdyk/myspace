@@ -1,23 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Month;
 
 use App\Http\Requests\MonthRequest;
 use App\Repositories\MonthMeta;
-use App\Repositories\Preferences;
 use App\Repositories\Trackers;
 use Carbon\Carbon;
 use Inertia\Controller;
 use Inertia\Inertia;
 
-class MonthController extends Controller
+class ProjectsController extends Controller
 {
-    public function index(MonthRequest $request, Trackers $trackers, Preferences $preferences, MonthMeta $monthMeta)
+    public function index(MonthRequest $request, Trackers $trackers, MonthMeta $monthMeta)
     {
-        if ($preferences->valid() === false) {
-            return redirect('/settings');
-        }
-
         $dayOfMonth = $request->dayOfMonth();
 
         $dailyHours = $trackers->getDailyHours($dayOfMonth);
@@ -33,17 +28,14 @@ class MonthController extends Controller
         $projects = $trackers->getMonthlyTimeByProject($dayOfMonth);
         list (, $weekdays, $weekends) = $monthMeta->getWeekdaysMeta($dayOfMonth);
 
-        return Inertia::render('Month', [
+        return Inertia::render('month/Projects', [
             'projects' => $projects->toArray(),
             'monthHours' => $projects->getHours(),
             'dailyHours' => array_values($dailyHours),
             'dayOfMonth' => $dayOfMonth->format('F, Y'),
             'weekdays' => $weekdays,
             'weekends' => $weekends,
-            'links' => [
-                ...$request->getLinks(),
-                'caption' => $dayOfMonth->format('F Y'),
-            ]
+            'links' => $request->getNav(),
         ]);
     }
 

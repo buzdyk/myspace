@@ -18,5 +18,6 @@ return [
     'clockify' => [
         'token' => env('CLOCKIFY_TOKEN'),
         'workspace_id' => env('CLOCKIFY_WORKSPACE_ID'),
+        'user_id' => env('CLOCKIFY_USER_ID'),
     ],
 ];

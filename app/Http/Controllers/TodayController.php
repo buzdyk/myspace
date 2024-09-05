@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\MonthRequest;
+use App\Http\Requests\DayRequest;
 use App\Repositories\Preferences;
 use App\Repositories\Today;
 use App\Repositories\TodayCache;
@@ -21,11 +21,8 @@ class TodayController extends Controller
         return redirect()->to($path);
     }
 
-    public function index(MonthRequest $request, Trackers $trackers, Preferences $settings, TodayCache $cache, Today $today)
+    public function index(DayRequest $request, Trackers $trackers, TodayCache $cache, Today $today)
     {
-        if ($settings->valid() === false) {
-            return redirect('/settings');
-        }
         $date = $request->dayOfMonth()->setDay((int) $request->day);
 
         try {
@@ -34,21 +31,11 @@ class TodayController extends Controller
 
         return Inertia::render('Today', [
             ...$today->setDay($date)->toArray(),
-            'projects' => $request->getProjects(),
-            'nav' => [
-                ...$request->getLinks(),
-                'monthLink' => strtolower($date->format('/Y/F') . '/calendar'),
-                'day' => $date->format('jS'),
-                'month' => $date->format('F'),
-                'year' => $date->isSameYear(now()) ? '' : $date->format('Y'),
-//                'caption' => $date->format('F, jS')
-            ],
-            'isToday' => $date->isSameDay(now()),
-            'readableDate' => $date->diffForHumans(now())
+            'nav' => $request->getNav(),
         ]);
     }
 
-    private function cacheValues(Carbon $date, Trackers $trackers, TodayCache $cache)
+    private function cacheValues(Carbon $date, Trackers $trackers, TodayCache $cache): void
     {
         $value = $trackers->runningHours();
         $cache->setRunningHours($value);

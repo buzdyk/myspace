@@ -8,17 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('trackers', function (Blueprint $table) {
+        Schema::create('projects', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('tracker_id');
             $table->string('name');
-            $table->string('type');
-            $table->json('config');
-            $table->timestamps();
+            $table->text('token');
+
+            $table->foreign('tracker_id')
+                ->references('id')
+                ->on('trackers')
+                ->onDelete('cascade');
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('trackers');
+        Schema::dropIfExists('projects');
     }
 };

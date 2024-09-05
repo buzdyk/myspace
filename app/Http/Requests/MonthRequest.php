@@ -2,16 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Repositories\Trackers;
-use Illuminate\Foundation\Http\FormRequest;
 use Carbon\Carbon;
 
-class MonthRequest extends FormRequest
+class MonthRequest extends PeriodRequest
 {
-    public function __construct(
-        protected Trackers $trackers,
-    ) {}
-
     public function dayOfMonth(): Carbon
     {
         $month = match($this->month) {
@@ -29,37 +23,22 @@ class MonthRequest extends FormRequest
             'december' => 12,
         };
 
-        return (new Carbon())
-            ->setMonth($month)
-            ->setYear((int) $this->year)
-            ->setDay($this->day ? (int) $this->day : 1);
+        return parent::dayOfMonth()->setMonth($month);
 
     }
 
-    public function getProjects()
+    public function getNav(): array
     {
-        $day = $this->dayOfMonth();
-        $this->trackers->getMonthlyTimeByProject($day);
-    }
-
-
-    public function getLinks(): array
-    {
-        $hasDay = (bool) $this->day;
-        $route = fn (Carbon $day) => '/' . strtolower($day->format($hasDay ? 'Y/F/d' : 'Y/F'));
+        $route = fn (Carbon $day) => '/' . strtolower($day->format('Y/F'));
 
         $day = $this->dayOfMonth();
 
         return [
             'thisLink' => $route($day),
-            'prevLink' => $route($hasDay ? $day->copy()->subDay() : $day->copy()->subMonth()),
-            'nextLink' => $route($hasDay ? $day->copy()->addDay() : $day->copy()->addMonth()),
-        ];
-    }
+            'prevLink' => $route($day->copy()->subMonth()),
+            'nextLink' => $route($day->copy()->addMonth()),
 
-    public function getReadableDay()
-    {
-        $date = $this->dayOfMonth();
-        $format = ($date->year === now()->year) ? '' : '';
+            'caption' => $day->format('F Y'),
+        ];
     }
 }
