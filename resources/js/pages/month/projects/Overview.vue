@@ -7,9 +7,10 @@ const hourlyRate = computed(() => usePage().props.hourlyRate)
 const props = defineProps({
     projects: { type: Array, required: true },
     monthHours: { type: Number, required: true },
+    projectedIncome: { type: Number, required: true },
+    projectedHours: { type: Number, required: true },
 })
 
-// todo refactor to helper
 const hoursToString = (number) =>
     Math.floor(number) + ':' + Math.round((number - Math.floor(number)) * 60).toString().padStart(2, '0')
 
@@ -21,16 +22,6 @@ const formatMoney = number => {
 
 <template>
 <div>
-    <div class="flex justify-between mb-4 text-gray-600">
-        <div class="w-3/4">
-            <span>Project</span>
-        </div>
-        <div class="text-right">
-            <span>Hours</span>
-        </div>
-        <div class="w-32 text-right">Earned</div>
-    </div>
-
     <div v-for="project in projects" v-show="project.hours" class="flex justify-between">
         <div class="w-3/4 flex justify-between">
             {{ project.projectTitle }}
@@ -42,11 +33,19 @@ const formatMoney = number => {
         </div>
     </div>
 
-    <div v-if="projects.length > 0" class="flex justify-between mt-8">
-        <div class="w-3/4">&nbsp;</div>
+    <div class="mt-8 flex justify-between">
+        <div class="w-3/4"></div>
         <div class="text-right">{{ hoursToString(monthHours) }}</div>
         <div class="w-32 text-right">
             {{ formatMoney((monthHours * hourlyRate).toFixed(0)) }}
+        </div>
+    </div>
+
+    <div class="flex justify-between text-gray-600">
+        <div class="w-3/4 text-gray-600"></div>
+        <div class="text-right">{{ hoursToString(projectedHours) }}</div>
+        <div class="w-32 text-right">
+            {{ formatMoney(projectedIncome) }}
         </div>
     </div>
 </div>

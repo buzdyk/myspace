@@ -6,6 +6,8 @@ import Overview from './projects/Overview.vue'
 const props = defineProps({
     projects: { type: Array, required: true },
     monthHours: { type: Number, required: true },
+    projectedIncome: { type: Number, required: true },
+    projectedHours: { type: Number, required: true },
     dayOfMonth: { type: String, required: true },
     weekdays: { type: Number, required: true },
     weekends: { type: Number, required: true },
@@ -22,7 +24,13 @@ const props = defineProps({
             </div>
 
             <div class="mt-10 mb-20">
-                <Overview v-if="monthHours" :projects="props.projects" :monthHours="props.monthHours" />
+                <Overview
+                    v-if="monthHours"
+                    :projects="props.projects"
+                    :monthHours="props.monthHours"
+                    :projectedIncome="props.projectedIncome"
+                    :projectedHours="props.projectedHours"
+                />
                 <EmptyPlaceholder v-else />
             </div>
         </div>
