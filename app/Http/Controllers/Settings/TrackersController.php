@@ -18,6 +18,15 @@ class TrackersController extends Controller
 
         return Inertia::render('settings/Trackers', [
             'trackers' => $trackers,
+            'navigation' => [
+                'thisLink' => '/settings'
+            ]
+        ]);
+    }
+
+    public function create(Request $request)
+    {
+        return Inertia::render('settings/TrackersCreate', [
             'trackerTypes' => array_map(fn($case) => $case->value, TrackerType::cases()),
             'trackerStatuses' => array_map(fn($case) => $case->value, TrackerStatus::cases()),
             'navigation' => [

@@ -1,20 +1,15 @@
 # Move Tracker Configuration to Database with CRUD
 
-> **Note:** New tasks are added to "In Queue" at the top. Mark tasks with [x] when completed, then move them to "Completed" section.
+> **Note:** Tasks use unique IDs across all sections. New tasks are added to "In Queue" with next available ID. When marking a task complete, move it from "In Queue" to "Completed" section.
 
 ## In Queue
 
-1. [ ] Encrypt trackers.config column:
-   - Create migration to change `config` column from `json` to `text`
-   - Update `app/Casts/TrackerConfigCast.php` to encrypt/decrypt using `Crypt::encryptString()` and `Crypt::decryptString()`
-   - Preserve ability to resolve config into config class instances (MayvenConfig, ClockifyConfig, etc.)
-2. [ ] Add helper text below config textarea showing expected JSON format for each tracker type:
-   - Mayven: `{"api_url": "https://...", "token": "Bearer ..."}`
-   - Clockify: `{"token": "...", "workspace_id": "...", "user_id": "..."}`
-   - Everhour: `{"api_url": "https://...", "token": "..."}`
-3. [ ] Add config validation in TrackersController based on tracker type (no connection testing on CRUD)
-4. [ ] Add method to `app/Http/Controllers/TrackersController.php` with `connect()` method to test credentials, it's called from frontend, updates and returns the tracker status
-5. [ ] Refactor `app/Repositories/Trackers.php::hydrate()` to load from database instead of config file
+12. [ ] Encrypt trackers.config column:
+    - Create migration to change `config` column from `json` to `text`
+    - Update `app/Casts/TrackerConfigCast.php` to encrypt/decrypt using `Crypt::encryptString()` and `Crypt::decryptString()`
+    - Preserve ability to resolve config into config class instances (MayvenConfig, ClockifyConfig, etc.)
+14. [ ] Add config validation in TrackersController based on tracker type (no connection testing on CRUD)
+15. [ ] Add method to `app/Http/Controllers/TrackersController.php` with `connect()` method to test credentials, it's called from frontend, updates and returns the tracker status
 
 ## Completed
 
@@ -44,3 +39,9 @@
     - Add inline edit/delete buttons for each tracker
     - Add status selector dropdown (disconnected/active/paused)
     - Use axios for CRUD operations
+13. [x] Add helper text below config textarea showing expected JSON format for each tracker type:
+    - Mayven: `{"api_url": "https://...", "token": "Bearer ..."}`
+    - Clockify: `{"token": "...", "workspace_id": "...", "user_id": "..."}`
+    - Everhour: `{"api_url": "https://...", "token": "..."}`
+16. [x] Refactor `app/Repositories/Trackers.php::hydrate()` to load from database instead of config file
+17. [x] Move Create Tracker form to separate page at `/settings/trackers/create`

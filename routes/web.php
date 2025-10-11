@@ -19,6 +19,7 @@ Route::get('/', function() {
 
 
 Route::get('/settings/trackers', [TrackersController::class, 'index']);
+Route::get('/settings/trackers/create', [TrackersController::class, 'create']);
 Route::post('/settings/trackers', [TrackersController::class, 'store']);
 Route::put('/settings/trackers/{tracker}', [TrackersController::class, 'update']);
 Route::delete('/settings/trackers/{tracker}', [TrackersController::class, 'destroy']);

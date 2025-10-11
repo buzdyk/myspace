@@ -2,9 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Enums\TrackerStatus;
+use App\Enums\TrackerType;
 use App\Interfaces\TimeTracker;
+use App\Models\Tracker;
 use App\Trackers\Clockify;
-use App\Trackers\Dota2;
 use App\Trackers\Everhour;
 use App\Trackers\Mayven;
 use App\Trackers\Placeholder;
@@ -24,49 +26,22 @@ class Trackers
 
     public function hydrate(): void
     {
-        if (request()->has('placeholder')) {
-            $this->addTracker(new Placeholder());
-            return; //cheeky
-        }
+        // Load active trackers from database
+        $dbTrackers = Tracker::where('status', TrackerStatus::Active)->get();
 
-        $mayven1 = config('services.mayven_1');
-        if ($mayven1['enabled']) {
-            $config = new \App\TrackerConfigs\MayvenConfig(
-                $mayven1['api_url'],
-                $mayven1['token']
-            );
-            $this->addTracker(new Mayven($config));
-        }
+        foreach ($dbTrackers as $dbTracker) {
+            $trackerInstance = match($dbTracker->type) {
+                TrackerType::Mayven => new Mayven($dbTracker->config),
+                TrackerType::Clockify => new Clockify($dbTracker->config),
+                TrackerType::Everhour => new Everhour($dbTracker->config),
+                // TrackerType::Dota2 => new Dota2($dbTracker->config), // TODO: Update Dota2 to accept config
+                default => null,
+            };
 
-        $mayven2 = config('services.mayven_2');
-        if ($mayven2['enabled']) {
-            $config = new \App\TrackerConfigs\MayvenConfig(
-                $mayven2['api_url'],
-                $mayven2['token']
-            );
-            $this->addTracker(new Mayven($config));
+            if ($trackerInstance) {
+                $this->addTracker($trackerInstance);
+            }
         }
-
-        if (config('services.everhour.token')) {
-            $config = new \App\TrackerConfigs\EverhourConfig(
-                config('services.everhour.api_url'),
-                config('services.everhour.token')
-            );
-            $this->addTracker(new Everhour($config));
-        }
-
-        if (config('services.clockify.token')) {
-            $config = new \App\TrackerConfigs\ClockifyConfig(
-                config('services.clockify.token'),
-                config('services.clockify.workspace_id'),
-                config('services.clockify.user_id')
-            );
-            $this->addTracker(new Clockify($config));
-        }
-
-//        if (config('services.steam.account_id')) {
-//            $this->addTracker(new Dota2());
-//        }
     }
 
     public function addTracker(TimeTracker $tracker): self

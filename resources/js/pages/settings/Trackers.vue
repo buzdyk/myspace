@@ -1,41 +1,26 @@
 <script setup>
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import Navigation from "../../components/Navigation.vue";
 
 const props = defineProps({
     trackers: { type: Array, required: true },
-    trackerTypes: { type: Array, required: true },
-    trackerStatuses: { type: Array, required: true },
     navigation: { type: Object, required: true }
 })
 
-const showCreateForm = ref(false);
 const editingTracker = ref(null);
 const message = ref('');
 
-const newTracker = ref({
-    title: '',
-    type: '',
-    status: 'disconnected',
-    config: '{}'
-});
-
-const createTracker = async () => {
-    try {
-        const config = JSON.parse(newTracker.value.config);
-        await axios.post('/settings/trackers', {
-            ...newTracker.value,
-            config
-        });
-        message.value = 'Tracker created successfully';
-        newTracker.value = { title: '', type: '', status: 'disconnected', config: '{}' };
-        showCreateForm.value = false;
-        window.location.reload();
-    } catch (error) {
-        message.value = 'Error creating tracker';
-    }
+const getConfigHelper = (type) => {
+    const helpers = {
+        'mayven': '{"api_url": "https://example.com", "token": "Bearer ey..."}',
+        'clockify': '{"token": "xxx", "workspace_id": "xxx", "user_id": "xxx"}',
+        'everhour': '{"api_url": "https://api.everhour.com", "token": "xxx"}',
+    };
+    return helpers[type] || '{}';
 };
+
+const editTrackerHelper = computed(() => getConfigHelper(editingTracker.value?.type));
 
 const startEdit = (tracker) => {
     editingTracker.value = {
@@ -94,7 +79,6 @@ const resetMessage = () => {
             <div class="mt-10">
                 <!-- Existing Trackers List -->
                 <div v-if="trackers.length > 0" class="mb-8">
-                    <h3 class="text-base mb-4 text-gray-300">Your Trackers</h3>
                     <div v-for="tracker in trackers" :key="tracker.id" class="mb-4 p-4 bg-gray-800 rounded">
                         <div v-if="editingTracker?.id !== tracker.id">
                             <div class="flex justify-between items-start">
@@ -117,7 +101,12 @@ const resetMessage = () => {
                                 <option v-for="status in trackerStatuses" :key="status" :value="status">{{ status }}</option>
                             </select>
 
-                            <textarea v-model="editingTracker.config" placeholder='{"key": "value"}' rows="4" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-xs font-mono rounded"></textarea>
+                            <div>
+                                <textarea v-model="editingTracker.config" placeholder='{"key": "value"}' rows="4" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-xs font-mono rounded"></textarea>
+                                <div v-if="editingTracker.type" class="mt-1 text-xs text-gray-500 font-mono">
+                                    Expected format: {{ editTrackerHelper }}
+                                </div>
+                            </div>
 
                             <div class="flex gap-2">
                                 <button @click="updateTracker(tracker)" class="px-4 py-2 text-xs bg-green-700 hover:bg-green-600 text-gray-200 rounded">Save</button>
@@ -129,31 +118,9 @@ const resetMessage = () => {
 
                 <!-- Create New Tracker -->
                 <div class="mb-4">
-                    <button v-if="!showCreateForm" @click="showCreateForm = true" class="px-4 py-2 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 rounded">
+                    <a :href="`${props.navigation.thisLink}/trackers/create`" class="px-4 py-2 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 rounded inline-block">
                         + Add New Tracker
-                    </button>
-                </div>
-
-                <div v-if="showCreateForm" class="p-4 bg-gray-800 rounded space-y-3">
-                    <h3 class="text-base mb-3 text-gray-300">Create New Tracker</h3>
-
-                    <input v-model="newTracker.title" placeholder="Tracker Title" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-sm rounded" />
-
-                    <select v-model="newTracker.type" class="w-full px-3 py-2 bg-gray-700 text-gray-200 outline-none text-sm rounded">
-                        <option value="" disabled>Select Type</option>
-                        <option v-for="type in trackerTypes" :key="type" :value="type">{{ type }}</option>
-                    </select>
-
-                    <select v-model="newTracker.status" class="w-full px-3 py-2 bg-gray-700 text-gray-200 outline-none text-sm rounded">
-                        <option v-for="status in trackerStatuses" :key="status" :value="status">{{ status }}</option>
-                    </select>
-
-                    <textarea v-model="newTracker.config" placeholder='{"api_url": "...", "token": "..."}' rows="6" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-xs font-mono rounded"></textarea>
-
-                    <div class="flex gap-2">
-                        <button @click="createTracker" class="px-4 py-2 text-xs bg-green-700 hover:bg-green-600 text-gray-200 rounded">Create</button>
-                        <button @click="showCreateForm = false" class="px-4 py-2 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 rounded">Cancel</button>
-                    </div>
+                    </a>
                 </div>
 
                 <div v-if="message" class="mt-6 text-center text-sm text-gray-400">
