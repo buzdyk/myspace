@@ -5,9 +5,16 @@ return [
         'account_id' => env('STEAM_ACCOUNT_ID')
     ],
 
-    'mayven' => [
+    'mayven_1' => [
+        'enabled' => true,
         'api_url' => env('MAYVEN_API_URL'),
-        'auth' => env('MAYVEN_AUTH'),
+        'token' => env('MAYVEN_AUTH'),
+    ],
+
+    'mayven_2' => [
+        'enabled' => true,
+        'api_url' => env('MAYVEN_API_URL_2'),
+        'token' => env('MAYVEN_AUTH_2'),
     ],
 
     'everhour' => [

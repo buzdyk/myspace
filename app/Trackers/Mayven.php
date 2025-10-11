@@ -3,6 +3,7 @@
 namespace App\Trackers;
 
 use App\Interfaces\TimeTracker;
+use App\TrackerConfigs\MayvenConfig;
 use App\Types\ProjectTimes;
 use App\Types\ProjectTime;
 use Carbon\Carbon;
@@ -13,15 +14,19 @@ class Mayven extends Rest implements TimeTracker
 {
     protected Client $client;
 
+    public function __construct(
+        protected MayvenConfig $config
+    ) {}
+
     protected function baseUri(): string
     {
-        return config('services.mayven.api_url');
+        return $this->config->api_url;
     }
 
     public function headers(): array
     {
         return [
-            'Authorization' => config('services.mayven.auth'),
+            'Authorization' => $this->config->token,
             'Accept' => 'application/json',
         ];
     }
@@ -63,7 +68,7 @@ class Mayven extends Rest implements TimeTracker
 
     public function getUserId(): ?int
     {
-        return Cache::rememberForever('mayven_user_id', function() {
+        return Cache::rememberForever($this->config->api_url . '_user_id', function() {
             $res = $this->get("/api/hydrate");
             $data = json_decode($res->getBody()->getContents());
             return $data->data->me->data->id;

@@ -29,16 +29,39 @@ class Trackers
             return; //cheeky
         }
 
-        if (config('services.mayven.auth')) {
-            $this->addTracker(new Mayven());
+        $mayven1 = config('services.mayven_1');
+        if ($mayven1['enabled']) {
+            $config = new \App\TrackerConfigs\MayvenConfig(
+                $mayven1['api_url'],
+                $mayven1['token']
+            );
+            $this->addTracker(new Mayven($config));
+        }
+
+        $mayven2 = config('services.mayven_2');
+        if ($mayven2['enabled']) {
+            $config = new \App\TrackerConfigs\MayvenConfig(
+                $mayven2['api_url'],
+                $mayven2['token']
+            );
+            $this->addTracker(new Mayven($config));
         }
 
         if (config('services.everhour.token')) {
-            $this->addTracker(new Everhour());
+            $config = new \App\TrackerConfigs\EverhourConfig(
+                config('services.everhour.api_url'),
+                config('services.everhour.token')
+            );
+            $this->addTracker(new Everhour($config));
         }
 
         if (config('services.clockify.token')) {
-            $this->addTracker(new Clockify());
+            $config = new \App\TrackerConfigs\ClockifyConfig(
+                config('services.clockify.token'),
+                config('services.clockify.workspace_id'),
+                config('services.clockify.user_id')
+            );
+            $this->addTracker(new Clockify($config));
         }
 
 //        if (config('services.steam.account_id')) {

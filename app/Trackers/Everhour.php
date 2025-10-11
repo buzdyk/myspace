@@ -3,6 +3,7 @@
 namespace App\Trackers;
 
 use App\Interfaces\TimeTracker;
+use App\TrackerConfigs\EverhourConfig;
 use App\Types\ProjectTimes;
 use App\Types\ProjectTime;
 use Carbon\Carbon;
@@ -13,14 +14,18 @@ class Everhour extends Rest implements TimeTracker
 {
     protected Client $client;
 
+    public function __construct(
+        protected EverhourConfig $config
+    ) {}
+
     protected function baseUri(): string
     {
-        return config('services.everhour.api_url');
+        return $this->config->api_url;
     }
 
     protected function headers(): array
     {
-        return ['X-Api-Key' => config('services.everhour.token')];
+        return ['X-Api-Key' => $this->config->token];
     }
 
     public function getSeconds(Carbon $from, Carbon $to): int

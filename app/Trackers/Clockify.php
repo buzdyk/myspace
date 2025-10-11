@@ -3,6 +3,7 @@
 namespace App\Trackers;
 
 use App\Interfaces\TimeTracker;
+use App\TrackerConfigs\ClockifyConfig;
 use App\Types\ProjectTimes;
 use App\Types\ProjectTime;
 use Carbon\Carbon;
@@ -14,6 +15,10 @@ class Clockify extends Rest implements TimeTracker
 {
     protected Client $client;
 
+    public function __construct(
+        protected ClockifyConfig $config
+    ) {}
+
     protected function baseUri(): string
     {
         return "https://api.clockify.me";
@@ -22,14 +27,14 @@ class Clockify extends Rest implements TimeTracker
     public function headers(): array
     {
         return [
-            'x-api-key' => config('services.clockify.token'),
+            'x-api-key' => $this->config->token,
             'Accept' => 'application/json',
         ];
     }
 
     private function getPathWithWorkspace(string $path = '/'): string
     {
-        $wid = config('services.clockify.workspace_id');
+        $wid = $this->config->workspace_id;
 
         return "/api/v1/workspaces/$wid". $path;
     }
@@ -81,7 +86,7 @@ class Clockify extends Rest implements TimeTracker
 
     public function getUserId(): ?string
     {
-        return config('services.clockify.user_id');
+        return $this->config->user_id;
     }
 
     public function getRunningSeconds(): int
