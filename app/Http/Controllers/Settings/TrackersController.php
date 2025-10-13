@@ -41,7 +41,7 @@ class TrackersController extends Controller
             'title' => 'required|string|max:255',
             'type' => ['required', Rule::enum(TrackerType::class)],
             'status' => ['required', Rule::enum(TrackerStatus::class)],
-            'config' => 'required|array',
+            'config' => 'nullable|array',
         ]);
 
         Tracker::create($validated);
@@ -49,23 +49,32 @@ class TrackersController extends Controller
         return redirect()->back();
     }
 
+    public function edit(Request $request, Tracker $tracker)
+    {
+        return Inertia::render('settings/TrackersEdit', [
+            'tracker' => $tracker,
+            'navigation' => [
+                'thisLink' => '/settings'
+            ]
+        ]);
+    }
+
     public function update(Request $request, Tracker $tracker)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'status' => ['required', Rule::enum(TrackerStatus::class)],
-            'config' => 'required|array',
         ]);
 
         $tracker->update($validated);
 
-        return redirect()->back();
+        return redirect('/settings/trackers');
     }
 
     public function destroy(Tracker $tracker)
     {
         $tracker->delete();
 
-        return redirect()->back();
+        return redirect('/settings/trackers');
     }
 }

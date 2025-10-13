@@ -34,6 +34,7 @@ class Trackers
                 TrackerType::Mayven => new Mayven($dbTracker->config),
                 TrackerType::Clockify => new Clockify($dbTracker->config),
                 TrackerType::Everhour => new Everhour($dbTracker->config),
+                TrackerType::Placeholder => new Placeholder(),
                 // TrackerType::Dota2 => new Dota2($dbTracker->config), // TODO: Update Dota2 to accept config
                 default => null,
             };
