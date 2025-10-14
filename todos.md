@@ -9,6 +9,10 @@
     - Update `app/Casts/TrackerConfigCast.php` to encrypt/decrypt using `Crypt::encryptString()` and `Crypt::decryptString()`
     - Preserve ability to resolve config into config class instances (MayvenConfig, ClockifyConfig, etc.)
 14. [ ] Add config validation in TrackersController based on tracker type (no connection testing on CRUD)
+    - Validate MayvenConfig requires `api_url` and `token`
+    - Validate ClockifyConfig requires `token`, `workspace_id`, and `user_id`
+    - Validate EverhourConfig requires `api_url` and `token`
+    - Prevent TrackerConfigCast from throwing errors when config is invalid
 15. [ ] Add method to `app/Http/Controllers/TrackersController.php` with `connect()` method to test credentials, it's called from frontend, updates and returns the tracker status
 
 ## Completed
