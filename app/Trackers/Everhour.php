@@ -8,6 +8,7 @@ use App\Types\ProjectTimes;
 use App\Types\ProjectTime;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Support\Facades\Cache;
 
 class Everhour extends Rest implements TimeTracker
@@ -28,41 +29,41 @@ class Everhour extends Rest implements TimeTracker
         return ['X-Api-Key' => $this->config->token];
     }
 
-    public function getSeconds(Carbon $from, Carbon $to): int
+    public function getSeconds(Carbon $from, Carbon $to): PromiseInterface
     {
-        $res = $this->get("/users/{$this->getUserId()}/time", ['query' => [
+        return $this->get("/users/{$this->getUserId()}/time", ['query' => [
             'from' => $from->toDateString(),
             'to' => $to->toDateString(),
-        ]]);
+        ]])->then(function($res) {
+            $items = json_decode($res->getBody()->getContents());
 
-        $items = json_decode($res->getBody()->getContents());
-
-        return array_reduce($items, fn ($carry, $item) => $item->time + $carry, 0);
+            return array_reduce($items, fn ($carry, $item) => $item->time + $carry, 0);
+        });
     }
 
-    public function getRunningSeconds(): int
+    public function getRunningSeconds(): PromiseInterface
     {
-        $res = $this->get("/timers/current");
+        return $this->get("/timers/current")->then(function($res) {
+            $data = json_decode($res->getBody()->getContents());
 
-        $data = json_decode($res->getBody()->getContents());
+            if ($data->status !== 'active') {
+                return 0;
+            }
 
-        if ($data->status !== 'active') {
-            return 0;
-        }
-
-        return $data->duration;
+            return $data->duration;
+        });
     }
 
     public function getUserId(): ?int
     {
         return Cache::rememberForever('everhour_user_id', function() {
-            $res = $this->get("/users/me");
+            $res = $this->get("/users/me")->wait(); // Wait for promise since this is cached
             $user = json_decode($res->getBody()->getContents());
             return $user->id;
         });
     }
 
-    public function getMonthIntervals(Carbon $dayOfMonth): ProjectTimes
+    public function getMonthIntervals(Carbon $dayOfMonth): PromiseInterface
     {
         $som = $dayOfMonth->copy()->startOfMonth();
         $eom = $dayOfMonth->copy()->endOfMonth();
@@ -72,24 +73,23 @@ class Everhour extends Rest implements TimeTracker
             'to' => $eom->toDateString(),
         ];
 
-        $res = $this->get("/users/{$this->getUserId()}/time", ['query' => $query]);
-        $items = json_decode($res->getBody()->getContents());
+        return $this->get("/users/{$this->getUserId()}/time", ['query' => $query])->then(function($res) {
+            $items = json_decode($res->getBody()->getContents());
 
-        $times = new ProjectTimes();
+            $times = new ProjectTimes();
 
-        foreach ($items as $item) {
-            $times->add(new ProjectTime('x', 'x', 'x', (int) $item->time, new Carbon($item->createdAt)));
-        }
+            foreach ($items as $item) {
+                $times->add(new ProjectTime('x', 'x', 'x', (int) $item->time, new Carbon($item->createdAt)));
+            }
 
-        return $times;
+            return $times;
+        });
     }
 
-    public function getMonthlyTimeByProject(Carbon $dayOfMonth): ProjectTimes
+    public function getMonthlyTimeByProject(Carbon $dayOfMonth): PromiseInterface
     {
         $som = $dayOfMonth->copy()->startOfMonth();
         $eom = $dayOfMonth->copy()->endOfMonth();
-
-        $map = new ProjectTimes();
 
         /**
          * the sum of items returned is incorrect (eg 35 hours instead of 62 hours)
@@ -97,16 +97,20 @@ class Everhour extends Rest implements TimeTracker
          * temporary solution: we assume a user has only one project in everhour
          */
 
-        if ($seconds = $this->getSeconds($som, $eom)) {
-            $map->add(new ProjectTime(
-                'everhour',
-                'one-and-only',
-                $this->getProjectName('one-and-only'),
-                $seconds
-            ));
-        }
+        return $this->getSeconds($som, $eom)->then(function($seconds) {
+            $map = new ProjectTimes();
 
-        return $map;
+            if ($seconds) {
+                $map->add(new ProjectTime(
+                    'everhour',
+                    'one-and-only',
+                    $this->getProjectName('one-and-only'),
+                    $seconds
+                ));
+            }
+
+            return $map;
+        });
     }
 
     private function getProjectName(string|int $projectId): string
@@ -114,7 +118,7 @@ class Everhour extends Rest implements TimeTracker
         $key = 'everhour_project_name_' . $projectId;
 
         return Cache::rememberForever($key, function() {
-            $res = $this->get("/projects");
+            $res = $this->get("/projects")->wait(); // Wait for promise since this is cached
             $projects = json_decode($res->getBody()->getContents());
             return $projects[0]->name;
         });
