@@ -79,8 +79,12 @@ class Mayven extends Rest implements TimeTracker
         return $this->get("/api/timer")->then(function($res) {
             $current = json_decode($res->getBody()->getContents());
 
+            if (!$current?->data?->started_at) {
+                return 0;
+            }
+
             $now = new Carbon();
-            $then = new Carbon($current?->data?->started_at);
+            $then = new Carbon($current->data->started_at);
 
             return $now->diffInSeconds($then, true);
         });
