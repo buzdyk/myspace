@@ -3,18 +3,22 @@
 namespace App\Trackers;
 
 use GuzzleHttp\Client;
-use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Promise\PromiseInterface;
 
 abstract class Rest
 {
     private static Client $client;
 
-    protected function get($path, array $params = []): ResponseInterface
+    /**
+     * Make an async GET request that returns a promise.
+     * The promise resolves to a PSR-7 ResponseInterface.
+     */
+    protected function get($path, array $params = []): PromiseInterface
     {
         $params['headers'] = $this->headers();
         $uri = $this->baseUri() . $path;
 
-        return $this->client()->get($uri, $params);
+        return $this->client()->getAsync($uri, $params);
     }
 
     private function client(): Client

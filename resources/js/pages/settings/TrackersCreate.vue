@@ -48,6 +48,25 @@ const resetMessage = () => {
                 <option v-for="status in trackerStatuses" :key="status" :value="status">{{ status }}</option>
             </select>
 
+            <!-- Mayven Config -->
+            <div v-if="newTracker.type === 'mayven'" class="space-y-3">
+                <input v-model="newTracker.config.api_url" placeholder="API URL" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-sm rounded" />
+                <input v-model="newTracker.config.token" placeholder="API Token" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-sm rounded" />
+            </div>
+
+            <!-- Everhour Config -->
+            <div v-if="newTracker.type === 'everhour'" class="space-y-3">
+                <input v-model="newTracker.config.api_url" placeholder="API URL" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-sm rounded" />
+                <input v-model="newTracker.config.token" placeholder="API Token" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-sm rounded" />
+            </div>
+
+            <!-- Clockify Config -->
+            <div v-if="newTracker.type === 'clockify'" class="space-y-3">
+                <input v-model="newTracker.config.token" placeholder="API Token" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-sm rounded" />
+                <input v-model="newTracker.config.workspace_id" placeholder="Workspace ID" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-sm rounded" />
+                <input v-model="newTracker.config.user_id" placeholder="User ID" class="w-full px-3 py-2 bg-gray-700 text-gray-200 focus:outline-none placeholder-gray-500 text-sm rounded" />
+            </div>
+
             <div>
                 <button @click="createTracker" class="px-4 py-2 text-xs bg-green-700 hover:bg-green-600 text-gray-200 rounded">Create Tracker</button>
             </div>

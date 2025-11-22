@@ -17,6 +17,7 @@ class ProjectTimes
 
     public function merge(ProjectTimes $items): self
     {
+        $items->rewind();
         while ($item = $items->next()) {
             $this->add($item);
         }

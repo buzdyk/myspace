@@ -8,13 +8,14 @@ use App\Types\ProjectTimes;
 use App\Types\ProjectTime;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Support\Facades\Cache;
 
 class Placeholder implements TimeTracker
 {
-    public function getSeconds(Carbon $from, Carbon $to): int
+    public function getSeconds(Carbon $from, Carbon $to): PromiseInterface
     {
-        return 9015;
+        return \GuzzleHttp\Promise\Create::promiseFor(9015);
     }
 
     public function getUserId(): ?int
@@ -22,12 +23,12 @@ class Placeholder implements TimeTracker
         return null;
     }
 
-    public function getRunningSeconds(): int
+    public function getRunningSeconds(): PromiseInterface
     {
-        return rand(0, 10000);
+        return \GuzzleHttp\Promise\Create::promiseFor(rand(0, 10000));
     }
 
-    public function getMonthlyTimeByProject(Carbon $dayOfMonth): ProjectTimes
+    public function getMonthlyTimeByProject(Carbon $dayOfMonth): PromiseInterface
     {
         $projects = [
             ['company', 'xxx', 'Tesla'],
@@ -41,10 +42,10 @@ class Placeholder implements TimeTracker
             $map->add(new ProjectTime($p[0], $p[1], $p[2], random_int(3600, 3600 * 100)));
         }
 
-        return $map;
+        return \GuzzleHttp\Promise\Create::promiseFor($map);
     }
 
-    public function getMonthIntervals(Carbon $dayOfMonth): ProjectTimes
+    public function getMonthIntervals(Carbon $dayOfMonth): PromiseInterface
     {
         $som = (new Carbon())->startOfMonth();
         $eom = (new Carbon())->endOfMonth()->subDays(11);
@@ -60,6 +61,6 @@ class Placeholder implements TimeTracker
             $som->addDay();
         }
 
-        return $pt;
+        return \GuzzleHttp\Promise\Create::promiseFor($pt);
     }
 }
