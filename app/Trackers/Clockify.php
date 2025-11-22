@@ -9,6 +9,7 @@ use App\Types\ProjectTime;
 use Carbon\Carbon;
 use Faker\Provider\Image;
 use GuzzleHttp\Client;
+use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Support\Facades\Cache;
 
 class Clockify extends Rest implements TimeTracker
@@ -47,41 +48,41 @@ class Clockify extends Rest implements TimeTracker
         return $end->diffInSeconds($start, true);
     }
 
-    public function getMonthIntervals(Carbon $dayOfMonth): ProjectTimes
+    public function getMonthIntervals(Carbon $dayOfMonth): PromiseInterface
     {
         $som = $dayOfMonth->copy()->startOfMonth();
         $eom = $dayOfMonth->copy()->endOfMonth();
 
         $path = $this->getPathWithWorkspace("/user/" . $this->getUserId() . "/time-entries");
-        $res = $this->get($path, ['query' => [
+        return $this->get($path, ['query' => [
             "start" => $som->toDateString() . 'T00:00:00Z',
             "end" => $eom->toDateString() . 'T23:59:59Z',
-        ]]);
+        ]])->then(function($res) {
+            $items = json_decode($res->getBody()->getContents());
+            $times = new ProjectTimes();
 
-        $items = json_decode($res->getBody()->getContents());
-        $times = new ProjectTimes();
+            foreach ($items as $item) {
+                $seconds = $this->getSecondsForTimeEntry($item);
+                $date = new Carbon($item->timeInterval->start);
+                $times->add(new ProjectTime('x', 'x', 'x', (int) $seconds, $date));
+            }
 
-        foreach ($items as $item) {
-            $seconds = $this->getSecondsForTimeEntry($item);
-            $date = new Carbon($item->timeInterval->start);
-            $times->add(new ProjectTime('x', 'x', 'x', (int) $seconds, $date));
-        }
-
-        return $times;
+            return $times;
+        });
     }
 
-    public function getSeconds(Carbon $from, Carbon $to): int
+    public function getSeconds(Carbon $from, Carbon $to): PromiseInterface
     {
         $path = $this->getPathWithWorkspace("/user/" . $this->getUserId() . "/time-entries");
-        $res = $this->get($path, ['query' => [
+        return $this->get($path, ['query' => [
             "start" => $from->toDateString() . 'T00:00:00Z',
             "end" => $to->toDateString() . 'T23:59:59Z',
-        ]]);
+        ]])->then(function($res) {
+            $items = json_decode($res->getBody()->getContents());
+            $reducer = fn ($carry, $item) => $carry + $this->getSecondsForTimeEntry($item);
 
-        $items = json_decode($res->getBody()->getContents());
-        $reducer = fn ($carry, $item) => $carry + $this->getSecondsForTimeEntry($item);
-
-        return array_reduce($items, $reducer, 0);
+            return array_reduce($items, $reducer, 0);
+        });
     }
 
     public function getUserId(): ?string
@@ -89,19 +90,21 @@ class Clockify extends Rest implements TimeTracker
         return $this->config->user_id;
     }
 
-    public function getRunningSeconds(): int
+    public function getRunningSeconds(): PromiseInterface
     {
-        return 0;
+        return \GuzzleHttp\Promise\Create::promiseFor(0);
     }
 
-    public function getMonthlyTimeByProject(Carbon $dayOfMonth): ProjectTimes
+    public function getMonthlyTimeByProject(Carbon $dayOfMonth): PromiseInterface
     {
         $som = $dayOfMonth->copy()->startOfMonth();
         $eom = $dayOfMonth->copy()->endOfMonth();
 
-        $projectTimes = new ProjectTimes();
-        $projectTimes->add(new ProjectTime('clockify', 'x', generateRandomString(10), $this->getSeconds($som, $eom)));
+        return $this->getSeconds($som, $eom)->then(function($seconds) {
+            $projectTimes = new ProjectTimes();
+            $projectTimes->add(new ProjectTime('clockify', 'x', generateRandomString(10), $seconds));
 
-        return $projectTimes;
+            return $projectTimes;
+        });
     }
 }

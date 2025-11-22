@@ -12,6 +12,7 @@ use App\Trackers\Mayven;
 use App\Trackers\Placeholder;
 use App\Types\ProjectTimes;
 use Carbon\Carbon;
+use GuzzleHttp\Promise\Utils;
 use Illuminate\Support\Collection;
 
 class Trackers
@@ -54,25 +55,53 @@ class Trackers
 
     public function hours(Carbon $from, Carbon $to): float
     {
-        $reducer = fn ($carry, TimeTracker $tracker) => $carry + $tracker->getSeconds($from, $to);
+        // Collect all promises
+        $promises = $this->trackers->map(fn(TimeTracker $tracker) => $tracker->getSeconds($from, $to));
 
-        return $this->trackers->reduce($reducer, 0) / 3600;
+        // Execute concurrently and sum results
+        $results = Utils::settle($promises->toArray())->wait();
+
+        $totalSeconds = 0;
+        foreach ($results as $result) {
+            if ($result['state'] === 'fulfilled') {
+                $totalSeconds += $result['value'];
+            }
+        }
+
+        return $totalSeconds / 3600;
     }
 
     public function runningHours(): float
     {
-        $reducer = fn ($carry, TimeTracker $tracker) => $carry + $tracker->getRunningSeconds();
+        // Collect all promises
+        $promises = $this->trackers->map(fn(TimeTracker $tracker) => $tracker->getRunningSeconds());
 
-        return $this->trackers->reduce($reducer, 0) / 3600;
+        // Execute concurrently and sum results
+        $results = Utils::settle($promises->toArray())->wait();
+
+        $totalSeconds = 0;
+        foreach ($results as $result) {
+            if ($result['state'] === 'fulfilled') {
+                $totalSeconds += $result['value'];
+            }
+        }
+
+        return $totalSeconds / 3600;
     }
 
     public function getMonthlyTimeByProject(Carbon $dayOfMonth, bool $singleDay = false): ProjectTimes
     {
-        $map = new ProjectTimes();
+        // Collect all promises
+        $promises = $this->trackers->map(fn(TimeTracker $tracker) => $tracker->getMonthlyTimeByProject($dayOfMonth));
 
-        /** @var TimeTracker $tracker */
-        foreach ($this->trackers as $tracker) {
-            $map->merge($tracker->getMonthlyTimeByProject($dayOfMonth));
+        // Execute concurrently and merge results
+        $results = Utils::settle($promises->toArray())->wait();
+
+        $map = new ProjectTimes();
+        foreach ($results as $result) {
+            if ($result['state'] === 'fulfilled' && $result['value'] instanceof ProjectTimes) {
+                $map->merge($result['value']);
+            }
         }
 
         return $map;
@@ -80,11 +109,17 @@ class Trackers
 
     public function getDailyHours(Carbon $dayOfMonth): array
     {
-        $map = new ProjectTimes();
+        // Collect all promises
+        $promises = $this->trackers->map(fn(TimeTracker $tracker) => $tracker->getMonthIntervals($dayOfMonth));
 
-        /** @var TimeTracker $tracker */
-        foreach ($this->trackers as $tracker) {
-            $map->merge($tracker->getMonthIntervals($dayOfMonth));
+        // Execute concurrently and merge results
+        $results = Utils::settle($promises->toArray())->wait();
+
+        $map = new ProjectTimes();
+        foreach ($results as $result) {
+            if ($result['state'] === 'fulfilled' && $result['value'] instanceof ProjectTimes) {
+                $map->merge($result['value']);
+            }
         }
 
         return $map->getDailyHours($dayOfMonth);
