@@ -26,8 +26,13 @@ class Mayven extends Rest implements TimeTracker
 
     public function headers(): array
     {
+        $token = $this->config->token;
+        if (!str_starts_with($token, 'Bearer ')) {
+            $token = 'Bearer ' . $token;
+        }
+
         return [
-            'Authorization' => $this->config->token,
+            'Authorization' => $token,
             'Accept' => 'application/json',
         ];
     }

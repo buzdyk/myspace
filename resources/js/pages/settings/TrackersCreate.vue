@@ -14,7 +14,7 @@ const message = ref('');
 const newTracker = ref({
     title: '',
     type: '',
-    status: 'disconnected',
+    status: 'active',
     config: {}
 });
 
