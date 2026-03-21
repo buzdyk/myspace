@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Auto-generate commit message using Claude
+# Runs after `git commit` but before editor opens
+# User can still edit the message before finalizing
+# Skip: SKIP_AI_HOOKS=1 git commit
+
+[ "${SKIP_AI_HOOKS:-}" = "1" ] && exit 0
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+
+# Only generate for regular commits (not merge, squash, etc.)
+if [ -n "$COMMIT_SOURCE" ]; then
+    exit 0
+fi
+
+# Skip if message already provided via -m flag
+if [ -s "$COMMIT_MSG_FILE" ] && ! grep -q "^#" "$COMMIT_MSG_FILE"; then
+    exit 0
+fi
+
+AI_CMD="${AI_CMD:-claude -p}"
+
+# Get staged diff
+STAGED_DIFF=$(git diff --cached --stat)
+STAGED_DIFF_FULL=$(git diff --cached)
+
+if [ -z "$STAGED_DIFF" ]; then
+    exit 0
+fi
+
+# Generate commit message
+MESSAGE=$($AI_CMD "Generate a concise git commit message for these changes.
+
+Files changed:
+${STAGED_DIFF}
+
+Diff:
+${STAGED_DIFF_FULL}
+
+Rules:
+- First line: imperative mood, max 50 chars, no period (e.g., 'Add user auth', 'Fix search bug')
+- If needed, add blank line then brief body explaining why (not what)
+- No conventional commit prefixes unless obvious (feat:, fix:, etc.)
+- Be specific, not generic
+- NEVER mention Claude, Sonnet, Opus, GPT, AI, LLM, or any AI tool
+- Write as if a human developer wrote it
+
+Output only the commit message, nothing else." 2>/dev/null)
+
+if [ -n "$MESSAGE" ]; then
+    # Prepend generated message, keep git's commented help text
+    EXISTING=$(cat "$COMMIT_MSG_FILE")
+    printf "%s\n\n%s" "$MESSAGE" "$EXISTING" > "$COMMIT_MSG_FILE"
+fi

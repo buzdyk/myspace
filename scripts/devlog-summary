@@ -1,0 +1,106 @@
+#!/bin/bash
+
+# Generate/update today's devlog from commits
+# Called by post-commit hook or run manually: ./scripts/devlog-summary
+
+set -e
+
+[ "${SKIP_AI_HOOKS:-}" = "1" ] && exit 0
+
+AI_CMD="${AI_CMD:-claude -p}"
+DEVLOG_DIR="$(git rev-parse --show-toplevel)/docs/devlog"
+DATE_FULL=$(date +"%Y-%m-%d")
+DATE_DISPLAY=$(date +"%b %d")
+
+# Build year/month directory path: YYYY/MM_MMM/DD.md
+YEAR=$(date +"%Y")
+MONTH_DIR=$(date +"%m_%b" | tr '[:lower:]' '[:upper:]')
+DAY=$(date +"%d")
+ENTRY_DIR="${DEVLOG_DIR}/${YEAR}/${MONTH_DIR}"
+mkdir -p "$ENTRY_DIR"
+FILE_PATH="${ENTRY_DIR}/${DAY}.md"
+
+# Wiki link path for DEVLOG.md index (relative to devlog/)
+WIKI_LINK="${YEAR}/${MONTH_DIR}/${DAY}"
+
+# Get today's commits
+TODAYS_COMMITS=$(git log --since="midnight" --pretty=format:"- %h %s" --reverse)
+
+if [ -z "$TODAYS_COMMITS" ]; then
+    echo "No commits today"
+    exit 0
+fi
+
+# Get changed files summary for context
+FILES_CHANGED=$(git log --since="midnight" --pretty=format:"" --name-only | sort -u | grep -v '^$' | head -20)
+
+# Generate summary
+SUMMARY=$($AI_CMD "Summarize a developer's daily work for their personal log.
+
+Commits:
+${TODAYS_COMMITS}
+
+Files:
+${FILES_CHANGED}
+
+Output as bullet points grouped by area. Example format:
+
+**Auth**
+- Added password reset flow
+- Implemented magic links
+
+**Docs**
+- Moved daily logs to devlog/
+
+Rules:
+- Group related changes under bold headers
+- Use short bullet points (5-10 words each)
+- No preamble, just the formatted summary
+- Skip trivial changes" 2>/dev/null || echo "_Summary generation failed - add manually_")
+
+# Write the file
+cat > "$FILE_PATH" << EOF
+---
+type: devlog
+date: ${DATE_FULL}
+---
+# ${DATE_DISPLAY} - Dev Log
+
+## Summary
+
+${SUMMARY}
+
+## Commits
+
+${TODAYS_COMMITS}
+EOF
+
+# Update DEVLOG.md if this date isn't already listed
+INDEX_FILE="${DEVLOG_DIR}/DEVLOG.md"
+if [ -f "$INDEX_FILE" ] && ! grep -q "\[\[${WIKI_LINK}\]\]" "$INDEX_FILE"; then
+    SHORT_DESC=$($AI_CMD "Summarize this in under 10 words for a table cell, no period at end:
+${SUMMARY}" 2>/dev/null || echo "Daily work log")
+
+    SHORT_DESC_ESCAPED=$(echo "$SHORT_DESC" | sed 's/[&/\]/\\&/g')
+    NEW_ROW="| ${DATE_FULL} | [[${WIKI_LINK}]] | ${SHORT_DESC_ESCAPED} |"
+
+    awk -v new_row="$NEW_ROW" '
+        /^\| 20[0-9][0-9]-/ { last_entry_line = NR }
+        /^\|---/ { separator_line = NR }
+        { lines[NR] = $0 }
+        END {
+            insert_after = last_entry_line ? last_entry_line : separator_line
+            for (i = 1; i <= NR; i++) {
+                print lines[i]
+                if (i == insert_after) print new_row
+            }
+        }
+    ' "$INDEX_FILE" > "${INDEX_FILE}.tmp" && mv "${INDEX_FILE}.tmp" "$INDEX_FILE"
+fi
+
+# Print output if run manually (not from hook)
+if [ -t 1 ]; then
+    echo "Written to $FILE_PATH"
+    echo ""
+    cat "$FILE_PATH"
+fi
